@@ -49,6 +49,19 @@ class MLModels:
         """
         print(f"Selecting features using {method} method...")
 
+        # Check for and handle NaN values
+        nan_mask = y.isna()
+        if nan_mask.any():
+            nan_count = nan_mask.sum()
+            print(
+                f"Warning: Found {nan_count} NaN values in target variable. Removing these samples for feature selection.")
+            valid_indices = ~nan_mask
+            X_valid = X.loc[valid_indices]
+            y_valid = y.loc[valid_indices]
+        else:
+            X_valid = X
+            y_valid = y
+
         if method == 'rf':
             selector = RandomForestRegressor(
                 n_estimators=100,
@@ -67,7 +80,7 @@ class MLModels:
             raise ValueError(f"Unsupported method: {method}")
 
         # Fit selector
-        selector.fit(X, y)
+        selector.fit(X_valid, y_valid)
 
         # Get feature importances
         if method == 'lasso':
