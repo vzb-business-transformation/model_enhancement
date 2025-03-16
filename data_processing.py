@@ -541,15 +541,19 @@ class DataProcessor:
             test_size (float): Proportion of data for testing
 
         Returns:
-            tuple: X_train, X_test, y_train, y_test
+            tuple: X_train, X_test, y_train, y_test, X_train_scaled, X_test_scaled
         """
-
-
         print("Preparing train/test split...")
 
         # Split features and target
         if target_col not in df.columns:
             raise ValueError(f"Target column '{target_col}' not found in DataFrame")
+
+        # Check for NaN values in target column
+        nan_count = df[target_col].isna().sum()
+        if nan_count > 0:
+            print(f"Warning: Found {nan_count} NaN values in target column '{target_col}'. Dropping these rows.")
+            df = df.dropna(subset=[target_col])
 
         X = df.drop(columns=[target_col])
         y = df[target_col]
