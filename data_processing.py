@@ -263,12 +263,21 @@ class DataProcessor:
 
                 # Create distance buckets
                 if 'ENDPOINT_DISTANCE_KM' in df.columns:
-                    df['DISTANCE_BUCKET'] = pd.qcut(
-                        df['ENDPOINT_DISTANCE_KM'].fillna(df['ENDPOINT_DISTANCE_KM'].median()),
-                        q=5,
-                        labels=['Very_Close', 'Close', 'Medium', 'Far', 'Very_Far'],
-                        duplicates='drop'
-                    )
+                    try:
+                        df['DISTANCE_BUCKET'] = pd.qcut(
+                            df['ENDPOINT_DISTANCE_KM'].fillna(df['ENDPOINT_DISTANCE_KM'].median()),
+                            q=5,
+                            labels=['Very_Close', 'Close', 'Medium', 'Far', 'Very_Far'],
+                            duplicates='drop'
+                        )
+                    except ValueError as e:
+                        print(f"Warning: Could not create distance buckets: {str(e)}")
+                        # Use a simpler alternative method
+                        df['DISTANCE_BUCKET'] = pd.cut(
+                            df['ENDPOINT_DISTANCE_KM'].fillna(df['ENDPOINT_DISTANCE_KM'].median()),
+                            bins=5,
+                            labels=['Very_Close', 'Close', 'Medium', 'Far', 'Very_Far']
+                        )
 
         # --- Speed features ---
 
