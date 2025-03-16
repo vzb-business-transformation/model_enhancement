@@ -394,12 +394,27 @@ class DataProcessor:
         """
         print("Starting data preprocessing...")
 
+        # Create a copy of the dataframe to avoid modifying the original
+        df = df.copy()
+
+        # Initial target column check
+        if target_col in df.columns:
+            print(f"Initial - Target column '{target_col}' exists with {df[target_col].notna().sum()} non-NaN values")
+        else:
+            print(f"WARNING: Target column '{target_col}' not found in initial dataframe")
+
         # 1. Distribution and initial filtering
         if is_training:
             df = self.get_evenly_distributed_circuits(df.copy(), is_training=True)
         else:
             df = self.get_evenly_distributed_circuits(df.copy(), is_training=False)
-        print(f"After distribution: {df.shape}")
+
+        # Check target after distribution
+        if target_col in df.columns:
+            print(
+                f"After distribution - Target column has {df[target_col].notna().sum()} non-NaN values out of {len(df)} rows")
+        else:
+            print(f"WARNING: Target column '{target_col}' lost after distribution")
 
         # 2. Handle speed columns with improved parsing
         speed_cols = [col for col in df.columns if 'SPEED' in col]
@@ -496,21 +511,38 @@ class DataProcessor:
             for col in high_cardinality_cols:
                 df[col] = df_encoded[col]
 
-        # 8. One-hot encoding for remaining categorical columns
-        categorical_cols = df.select_dtypes(include=['object', 'category']).columns
-        categorical_cols = [col for col in categorical_cols if col != target_col]  # Exclude target column
-
-        if categorical_cols:
-            # Save target column
+        # 8. One-hot encoding - CRITICAL POINT
+        print(f"Before one-hot encoding - Target column exists: {target_col in df.columns}")
+        if target_col in df.columns:
+            print(f"  Target column type: {df[target_col].dtype}")
+            print(f"  Target column non-NaN values: {df[target_col].notna().sum()}")
+            # Save target column separately
             target_values = df[target_col].copy()
 
-            # Apply one-hot encoding
-            df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
+        # Apply one-hot encoding more carefully
+        categorical_cols = df.select_dtypes(include=['object', 'category']).columns
+        categorical_cols = [col for col in categorical_cols if col != target_col]
 
-            # Make sure target column is preserved
-            if target_col not in df.columns:
-                df[target_col] = target_values
-                print(f"Restored target column after one-hot encoding")
+        print(f"Categorical columns to encode: {categorical_cols.tolist()}")
+
+        if len(categorical_cols) > 0:
+            # Encode only categorical columns
+            encoded_cats = pd.get_dummies(df[categorical_cols], drop_first=True)
+
+            # Drop original categorical columns
+            df = df.drop(columns=categorical_cols)
+
+            # Join encoded columns
+            df = pd.concat([df, encoded_cats], axis=1)
+
+        # Verify target column after encoding
+        if target_col not in df.columns:
+            print(f"Target column lost after encoding, restoring it")
+            df[target_col] = target_values
+
+        print(f"After one-hot encoding - Target column exists: {target_col in df.columns}")
+        if target_col in df.columns:
+            print(f"  Target column non-NaN values: {df[target_col].notna().sum()}")
 
         # 9. Handle outliers with robust scaling instead of removal
         numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns
@@ -524,28 +556,46 @@ class DataProcessor:
             else:
                 print("Warning: RobustScaler not fitted. Skipping transformation.")
 
+
         # 10. KNN imputation for remaining missing values
         if is_training:
-            self.knn_imputer = KNNImputer(n_neighbors=5)
-            df_numeric = self.knn_imputer.fit_transform(df.select_dtypes(include=['float64', 'int64']))
-            # Convert back to DataFrame
-            df_numeric = pd.DataFrame(df_numeric, columns=df.select_dtypes(include=['float64', 'int64']).columns)
-            # Replace in original DataFrame
-            for col in df_numeric.columns:
-                df[col] = df_numeric[col]
-        else:
-            if hasattr(self, 'knn_imputer') and self.knn_imputer is not None:
-                df_numeric = self.knn_imputer.transform(df.select_dtypes(include=['float64', 'int64']))
-                df_numeric = pd.DataFrame(df_numeric, columns=df.select_dtypes(include=['float64', 'int64']).columns)
-                for col in df_numeric.columns:
-                    df[col] = df_numeric[col]
+            # Select numeric columns excluding target
+            numeric_cols_to_impute = [col for col in df.select_dtypes(include=['float64', 'int64']).columns if
+                                      col != target_col]
+
+            # Save target column
+            target_values = df[target_col].copy()
+
+            # Impute other numeric columns
+            if numeric_cols_to_impute:
+                self.knn_imputer = KNNImputer(n_neighbors=5)
+                df_imputed = df[numeric_cols_to_impute].copy()
+                df_imputed_values = self.knn_imputer.fit_transform(df_imputed)
+
+                # Convert back to DataFrame and update original
+                df_imputed = pd.DataFrame(df_imputed_values, columns=numeric_cols_to_impute, index=df.index)
+                for col in numeric_cols_to_impute:
+                    df[col] = df_imputed[col]
+
+            # Restore target column
+            df[target_col] = target_values
 
         # 11. Convert all columns to float32 for efficiency
+        target_values = df[target_col].copy()
+
+        # Convert other columns
         for col in df.columns:
-            df[col] = df[col].astype(np.float32)
+            if col != target_col:  # Skip target column
+                df[col] = df[col].astype(np.float32)
+
+        # Restore target column separately to ensure it's preserved exactly
+        df[target_col] = target_values
 
         print(f"Preprocessing complete. Final shape: {df.shape}")
         print(f"After distribution - Target column NaN count: {df[target_col].isna().sum()}")
+        print(f"Final preprocessed data - Target column exists: {target_col in df.columns}")
+        if target_col in df.columns:
+            print(f"  Target column non-NaN values: {df[target_col].notna().sum()} out of {len(df)} rows")
 
         return df
 
