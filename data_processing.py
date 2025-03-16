@@ -497,7 +497,20 @@ class DataProcessor:
                 df[col] = df_encoded[col]
 
         # 8. One-hot encoding for remaining categorical columns
-        df = pd.get_dummies(df, drop_first=True)
+        categorical_cols = df.select_dtypes(include=['object', 'category']).columns
+        categorical_cols = [col for col in categorical_cols if col != target_col]  # Exclude target column
+
+        if categorical_cols:
+            # Save target column
+            target_values = df[target_col].copy()
+
+            # Apply one-hot encoding
+            df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
+
+            # Make sure target column is preserved
+            if target_col not in df.columns:
+                df[target_col] = target_values
+                print(f"Restored target column after one-hot encoding")
 
         # 9. Handle outliers with robust scaling instead of removal
         numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns
