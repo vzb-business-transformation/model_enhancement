@@ -71,36 +71,37 @@ After distribution: (47942, 57)
 Engineering features...
 Warning: Could not create distance buckets: Bin labels must be one fewer than the number of bin edges
 Feature engineering complete. New shape: (47942, 96)
-Preprocessing complete. Final shape: (47942, 119)
+Preprocessing complete. Final shape: (47942, 117)
 Preparing train/test split...
+Warning: Found 47943 NaN values in target column 'DISCO_DURATION'. Dropping these rows.
 Warning: Stratified split failed. Using regular split.
-Train set shape: (38353, 118)
-Test set shape: (9589, 118)
-Selecting features using rf method...
+Traceback (most recent call last):
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 564, in prepare_train_test_data
+    X_train, X_test, y_train, y_test = train_test_split(
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2660, in train_test_split
+    n_train, n_test = _validate_shuffle_split(
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2308, in _validate_shuffle_split
+    raise ValueError(
+ValueError: With n_samples=0, test_size=0.2 and train_size=None, the resulting train set will be empty. Adjust any of the aforementioned parameters.
+
+During handling of the above exception, another exception occurred:
+
 Traceback (most recent call last):
   File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 278, in <module>
     main()
   File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 267, in main
     train_pipeline(args)
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 81, in train_pipeline
-    X_train_selected = ml_models.select_features(X_train, y_train, threshold=0.001, method='rf')
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/ml_models.py", line 70, in select_features
-    selector.fit(X, y)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/base.py", line 1474, in wrapper
-    return fit_method(estimator, *args, **kwargs)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/ensemble/_forest.py", line 363, in fit
-    X, y = self._validate_data(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/base.py", line 650, in _validate_data
-    X, y = check_X_y(X, y, **check_params)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/validation.py", line 1279, in check_X_y
-    y = _check_y(y, multi_output=multi_output, y_numeric=y_numeric, estimator=estimator)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/validation.py", line 1289, in _check_y
-    y = check_array(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/validation.py", line 1049, in check_array
-    _assert_all_finite(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/validation.py", line 126, in _assert_all_finite
-    _assert_all_finite_element_wise(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/validation.py", line 175, in _assert_all_finite_element_wise
-    raise ValueError(msg_err)
-ValueError: Input y contains NaN.
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 73, in train_pipeline
+    X_train, X_test, y_train, y_test, X_train_scaled, X_test_scaled = data_processor.prepare_train_test_data(
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 570, in prepare_train_test_data
+    X_train, X_test, y_train, y_test = train_test_split(
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 213, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2660, in train_test_split
+    n_train, n_test = _validate_shuffle_split(
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2308, in _validate_shuffle_split
+    raise ValueError(
+ValueError: With n_samples=0, test_size=0.2 and train_size=None, the resulting train set will be empty. Adjust any of the aforementioned parameters.
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %
