@@ -203,3 +203,76 @@ def predict_pipeline(args):
     print(f"Predictions saved to {output_file}")
 
     return results_df
+
+
+def evaluate_pipeline(args):
+    """Evaluate models on new data with known targets"""
+    print("\n=== Starting Circuit Prediction Evaluation Pipeline ===\n")
+    start_time = time.time()
+
+    # 1. Load data
+    data_processor = DataProcessor(random_state=args.random_state)
+    df = data_processor.load_data()  # Use your Teradata data loading method
+
+    # Ensure target column exists
+    if args.target not in df.columns:
+        raise ValueError(f"Target column '{args.target}' not found in evaluation data")
+
+    # 2. Load saved components
+    data_processor.load_preprocessor(os.path.join(args.output_dir, 'models', 'data_processor.joblib'))
+
+    ml_models = MLModels(random_state=args.random_state)
+    trained_models = ml_models.load_models(os.path.join(args.output_dir, 'models'))
+
+    # 3. Preprocess data
+    processed_df = data_processor.preprocess_data(df, is_training=False, target_col=args.target)
+
+    # 4. Prepare evaluation data
+    X_eval = processed_df.drop(columns=[args.target])
+    y_eval = processed_df[args.target]
+
+    # 5. Evaluate each model
+    results = {}
+    for name, model in trained_models.items():
+        try:
+            y_pred = model.predict(X_eval)
+            metrics = ml_models.calculate_metrics(y_eval, y_pred)
+            results[name] = metrics
+
+            print(f"\n{name} model performance:")
+            for metric_name, value in metrics.items():
+                print(f"  {metric_name}: {value:.4f}")
+        except Exception as e:
+            print(f"Error evaluating model {name}: {str(e)}")
+
+    print(f"\nEvaluation pipeline completed in {time.time() - start_time:.2f} seconds")
+
+    return results
+
+
+def main():
+    print("Starting main function...")
+
+    # Parse command line arguments
+    args = parse_arguments()
+    print(f"Arguments parsed: {args}")
+
+    # Setup output directories
+    setup_directories(args.output_dir)
+    print(f"Directories set up at: {args.output_dir}")
+
+    # Run appropriate pipeline based on mode
+    if args.mode == 'train':
+        print("Starting training pipeline...")
+        train_pipeline(args)
+    elif args.mode == 'predict':
+        predict_pipeline(args)
+    elif args.mode == 'evaluate':
+        evaluate_pipeline(args)
+    else:
+        print(f"Invalid mode: {args.mode}")
+
+    print("Script execution completed.")
+
+if __name__ == '__main__':
+    main()
