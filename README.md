@@ -130,3 +130,21 @@ Required packages:
 - joblib
 - category_encoders
 
+# Proxy settings
+PROXY_HOST = tpaproxy.verizon.com
+PROXY_PORT = 80
+PROXY_URL = http://$(PROXY_HOST):$(PROXY_PORT)
+
+.PHONY: all setup install run clean flask
+
+all: install
+
+# Set up conda environment
+setup:
+	@echo "Creating conda environment..."
+	@conda create -n $(CONDA_ENV_NAME) python=3.9 -y
+	@echo "Configuring proxy settings..."
+	@conda create -n $(CONDA_ENV_NAME) python=3.9 -y
+	@conda config --set proxy_servers.http $(PROXY_URL)
+	@conda config --set proxy_servers.https $(PROXY_URL)
+
