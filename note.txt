@@ -70,23 +70,20 @@ Total circuits: 47942
 After distribution: (47942, 57)
 Engineering features...
 Warning: Could not create distance buckets: Bin labels must be one fewer than the number of bin edges
-Feature engineering complete. New shape: (47942, 96)
+Feature engineering complete. New shape: (47943, 96)
 After feature engineering - Target column NaN count: 0
-Preprocessing complete. Final shape: (47943, 119)
-After distribution - Target column NaN count: 47943
-Preparing train/test split...
-Target column 'DISCO_DURATION' stats:
-  - Data type: float32
-  - NaN count: 47943
-  - Total rows: 47943
+Before one-hot encoding - Target column exists: True
+  Target column type: int64
+  Target column non-NaN values: 47943
 Traceback (most recent call last):
   File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 278, in <module>
     main()
   File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 267, in main
     train_pipeline(args)
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 73, in train_pipeline
-    X_train, X_test, y_train, y_test, X_train_scaled, X_test_scaled = data_processor.prepare_train_test_data(
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 570, in prepare_train_test_data
-    raise ValueError(f"All values in target column '{target_col}' are NaN. Please check your data.")
-ValueError: All values in target column 'DISCO_DURATION' are NaN. Please check your data.
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 70, in train_pipeline
+    processed_df = data_processor.preprocess_data(df, is_training=True, target_col=args.target)
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 526, in preprocess_data
+    print(f"Categorical columns to encode: {categorical_cols.tolist()}")
+AttributeError: 'list' object has no attribute 'tolist'
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %
+
