@@ -1,7 +1,88 @@
-(streamlit) SRIWOPE@XHK9JJM27Y model_enhancement % python main.py
+(streamlit) SRIWOPE@XHK9JJM27Y model_enhancement % python main.py --mode train --output_dir results
+run_sql took 52.70 seconds to run.
+Starting main function...
+Arguments parsed: Namespace(data_file=None, mode='train', target='DISCO_DURATION', models='all', nn_type='mlp', output_dir='results', random_state=42)
+Directories set up at: results
+Starting training pipeline...
+
+=== Starting Circuit Prediction Training Pipeline ===
+
+Starting data preprocessing...
+
+Filtered to 296047 circuits with valid disconnect data
+Month 202301: 22375 with order num, 0 without
+Month 202302: 22372 with order num, 0 without
+Month 202303: 22405 with order num, 0 without
+Month 202304: 22333 with order num, 0 without
+Month 202305: 21160 with order num, 0 without
+Month 202306: 19964 with order num, 0 without
+Month 202307: 18615 with order num, 0 without
+Month 202308: 17321 with order num, 0 without
+Month 202309: 15982 with order num, 0 without
+Month 202310: 14852 with order num, 0 without
+Month 202311: 13677 with order num, 0 without
+Month 202312: 12596 with order num, 0 without
+Month 202401: 11335 with order num, 0 without
+Month 202402: 10212 with order num, 0 without
+Month 202403: 9154 with order num, 0 without
+Month 202404: 8274 with order num, 0 without
+Month 202405: 6873 with order num, 0 without
+Month 202406: 5776 with order num, 0 without
+Month 202407: 5013 with order num, 0 without
+Month 202408: 4354 with order num, 0 without
+Month 202409: 3626 with order num, 0 without
+Month 202410: 3084 with order num, 0 without
+Month 202411: 2624 with order num, 0 without
+Month 202412: 2070 with order num, 0 without
+
+Final distribution:
+Circuits with disconnect order number: 47939
+Circuits without disconnect order number: 0
+
+New counts per month:
+PROD_YR_MTH
+202301    1998
+202302    1998
+202303    1997
+202304    1997
+202305    1998
+202306    1996
+202307    1997
+202308    1998
+202309    1997
+202310    1999
+202311    1997
+202312    1998
+202401    1997
+202402    1998
+202403    1998
+202404    1997
+202405    1997
+202406    1998
+202407    1998
+202408    1998
+202409    1996
+202410    1997
+202411    1997
+202412    1998
+dtype: int64
+Total circuits: 47939
+After distribution: (47939, 57)
+Engineering features...
 Traceback (most recent call last):
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 12, in <module>
-    from data_processing import DataProcessor
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 6, in <module>
-    import category_encoders as ce
-ModuleNotFoundError: No module named 'category_encoders'
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 278, in <module>
+    main()
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 267, in main
+    train_pipeline(args)
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 70, in train_pipeline
+    processed_df = data_processor.preprocess_data(df, is_training=True, target_col=args.target)
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 441, in preprocess_data
+    df = self.engineer_features(df)
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 266, in engineer_features
+    df['DISTANCE_BUCKET'] = pd.qcut(
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/pandas/core/reshape/tile.py", line 340, in qcut
+    fac, bins = _bins_to_cuts(
+  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/pandas/core/reshape/tile.py", line 493, in _bins_to_cuts
+    raise ValueError(
+ValueError: Bin labels must be one fewer than the number of bin edges
+(streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %
