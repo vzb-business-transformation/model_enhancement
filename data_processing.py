@@ -377,6 +377,7 @@ class DataProcessor:
             df[f'LOG_{feat}'] = np.log1p(df[feat].clip(lower=0))
 
         print(f"Feature engineering complete. New shape: {df.shape}")
+
         return df
 
     def preprocess_data(self, df, is_training=True, target_col='DISCO_DURATION'):
@@ -447,7 +448,9 @@ class DataProcessor:
             df['RPTG_CRCTP'] = df['RPTG_CRCTP'].apply(lambda x: str(x).split('x')[-1])
 
         # 4. Add engineered features
+
         df = self.engineer_features(df)
+        print(f"After feature engineering - Target column NaN count: {df[target_col].isna().sum()}")
 
         # 5. Drop unnecessary columns
         columns_to_drop = [
@@ -529,6 +532,8 @@ class DataProcessor:
             df[col] = df[col].astype(np.float32)
 
         print(f"Preprocessing complete. Final shape: {df.shape}")
+        print(f"After distribution - Target column NaN count: {df[target_col].isna().sum()}")
+
         return df
 
     def prepare_train_test_data(self, df, target_col, test_size=0.2):
@@ -548,6 +553,21 @@ class DataProcessor:
         # Split features and target
         if target_col not in df.columns:
             raise ValueError(f"Target column '{target_col}' not found in DataFrame")
+
+        # Print target column info
+        print(f"Target column '{target_col}' stats:")
+        print(f"  - Data type: {df[target_col].dtype}")
+        print(f"  - NaN count: {df[target_col].isna().sum()}")
+        print(f"  - Total rows: {len(df)}")
+
+        if df[target_col].notna().sum() > 0:
+            print(f"  - Min value: {df[target_col].min()}")
+            print(f"  - Max value: {df[target_col].max()}")
+            print(f"  - Mean value: {df[target_col].mean()}")
+
+        # Check if all values are NaN
+        if df[target_col].isna().all():
+            raise ValueError(f"All values in target column '{target_col}' are NaN. Please check your data.")
 
         # Check for NaN values in target column
         nan_count = df[target_col].isna().sum()
