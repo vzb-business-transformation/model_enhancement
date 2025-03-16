@@ -71,23 +71,14 @@ After distribution: (47942, 57)
 Engineering features...
 Warning: Could not create distance buckets: Bin labels must be one fewer than the number of bin edges
 Feature engineering complete. New shape: (47942, 96)
-Preprocessing complete. Final shape: (47942, 117)
+After feature engineering - Target column NaN count: 0
+Preprocessing complete. Final shape: (47943, 119)
+After distribution - Target column NaN count: 47943
 Preparing train/test split...
-Warning: Found 47943 NaN values in target column 'DISCO_DURATION'. Dropping these rows.
-Warning: Stratified split failed. Using regular split.
-Traceback (most recent call last):
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 564, in prepare_train_test_data
-    X_train, X_test, y_train, y_test = train_test_split(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 213, in wrapper
-    return func(*args, **kwargs)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2660, in train_test_split
-    n_train, n_test = _validate_shuffle_split(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2308, in _validate_shuffle_split
-    raise ValueError(
-ValueError: With n_samples=0, test_size=0.2 and train_size=None, the resulting train set will be empty. Adjust any of the aforementioned parameters.
-
-During handling of the above exception, another exception occurred:
-
+Target column 'DISCO_DURATION' stats:
+  - Data type: float32
+  - NaN count: 47943
+  - Total rows: 47943
 Traceback (most recent call last):
   File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 278, in <module>
     main()
@@ -96,12 +87,6 @@ Traceback (most recent call last):
   File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 73, in train_pipeline
     X_train, X_test, y_train, y_test, X_train_scaled, X_test_scaled = data_processor.prepare_train_test_data(
   File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 570, in prepare_train_test_data
-    X_train, X_test, y_train, y_test = train_test_split(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/_param_validation.py", line 213, in wrapper
-    return func(*args, **kwargs)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2660, in train_test_split
-    n_train, n_test = _validate_shuffle_split(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/model_selection/_split.py", line 2308, in _validate_shuffle_split
-    raise ValueError(
-ValueError: With n_samples=0, test_size=0.2 and train_size=None, the resulting train set will be empty. Adjust any of the aforementioned parameters.
+    raise ValueError(f"All values in target column '{target_col}' are NaN. Please check your data.")
+ValueError: All values in target column 'DISCO_DURATION' are NaN. Please check your data.
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %
