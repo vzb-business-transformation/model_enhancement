@@ -6,6 +6,7 @@ from sklearn.impute import KNNImputer
 import category_encoders as ce
 import joblib
 from sklearn.model_selection import train_test_split
+from load_data import train_data
 
 class DataProcessor:
     """
@@ -25,30 +26,32 @@ class DataProcessor:
         self.target_encoder = None
         self.knn_imputer = None
 
-    def load_data(self, filepath):
-        """
-        Load data from a file.
-
-        Args:
-            filepath (str): Path to the data file
-
-        Returns:
-            pd.DataFrame: Loaded data
-        """
-        print(f"Loading data from {filepath}")
-
-        # Determine file type and load accordingly
-        if filepath.endswith('.csv'):
-            df = pd.read_csv(filepath)
-        elif filepath.endswith('.xlsx') or filepath.endswith('.xls'):
-            df = pd.read_excel(filepath)
-        elif filepath.endswith('.parquet'):
-            df = pd.read_parquet(filepath)
-        else:
-            raise ValueError(f"Unsupported file format: {filepath}")
-
-        print(f"Loaded data with shape: {df.shape}")
+    def load_data(self, df = train_data):
         return df
+    # def load_data(self, filepath):
+    #     """
+    #     Load data from a file.
+    #
+    #     Args:
+    #         filepath (str): Path to the data file
+    #
+    #     Returns:
+    #         pd.DataFrame: Loaded data
+    #     """
+    #     print(f"Loading data from {filepath}")
+    #
+    #     # Determine file type and load accordingly
+    #     if filepath.endswith('.csv'):
+    #         df = pd.read_csv(filepath)
+    #     elif filepath.endswith('.xlsx') or filepath.endswith('.xls'):
+    #         df = pd.read_excel(filepath)
+    #     elif filepath.endswith('.parquet'):
+    #         df = pd.read_parquet(filepath)
+    #     else:
+    #         raise ValueError(f"Unsupported file format: {filepath}")
+    #
+    #     print(f"Loaded data with shape: {df.shape}")
+    #     return df
 
     def get_evenly_distributed_circuits(self, df, is_training=True):
         """

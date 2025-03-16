@@ -1,0 +1,7 @@
+(streamlit) SRIWOPE@XHK9JJM27Y model_enhancement % python main.py
+Traceback (most recent call last):
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 12, in <module>
+    from data_processing import DataProcessor
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 6, in <module>
+    import category_encoders as ce
+ModuleNotFoundError: No module named 'category_encoders'
