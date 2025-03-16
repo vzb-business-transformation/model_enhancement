@@ -19,8 +19,9 @@ def parse_arguments():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(description='Circuit Prediction Pipeline')
 
-    parser.add_argument('--data_file', type=str, required=True,
-                        help='Path to input data file')
+
+    parser.add_argument('--data_file', type=str, required=False, default=None,
+                            help='Path to input data file (not required when using Teradata)')
 
     parser.add_argument('--mode', type=str, default='train',
                         choices=['train', 'predict', 'evaluate'],
@@ -59,8 +60,11 @@ def train_pipeline(args):
     start_time = time.time()
 
     # 1. Load data
+
     data_processor = DataProcessor(random_state=args.random_state)
-    df = data_processor.load_data(args.data_file)
+    # Use load_data without arguments when data_file is None
+    df = data_processor.load_data() if args.data_file is None else data_processor.load_data(args.data_file)
+
 
     # 2. Preprocess data
     processed_df = data_processor.preprocess_data(df, is_training=True, target_col=args.target)
