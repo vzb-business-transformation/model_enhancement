@@ -140,3 +140,34 @@ Traceback (most recent call last):
     save_results_summary(args, all_results, ml_models.feature_importances,
 NameError: name 'save_results_summary' is not defined
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %
+
+
+import joblib
+
+model_path = 'results/models/'
+feature_importances = joblib.load(model_path + 'feature_importances.joblib')
+
+# Get keys to see what models have feature importances
+print("Available models with feature importances:", list(feature_importances.keys()))
+
+# View Random Forest feature importance
+rf_importance = feature_importances['rf']
+print("\nTop 10 most important features (Random Forest):")
+print(rf_importance.head(10))
+
+# View XGBoost feature importance if available
+if 'xgb' in feature_importances:
+    xgb_importance = feature_importances['xgb']
+    print("\nTop 10 most important features (XGBoost):")
+    print(xgb_importance.head(10))
+
+# Plot Random Forest feature importance
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 8))
+rf_importance.head(20).plot(kind='barh')
+plt.title('Random Forest Feature Importance')
+plt.xlabel('Importance')
+plt.tight_layout()
+plt.savefig('rf_feature_importance.png')  # Save to file
+plt.show()  # Display plot
