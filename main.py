@@ -17,11 +17,11 @@ from deep_learning_models import DLModels, train_circuit_nn_model
 
 def parse_arguments():
     """Parse command line arguments"""
+
     parser = argparse.ArgumentParser(description='Circuit Prediction Pipeline')
 
-
     parser.add_argument('--data_file', type=str, required=False, default=None,
-                            help='Path to input data file (not required when using Teradata)')
+                        help='Path to input data file (not required when using Teradata)')
 
     parser.add_argument('--mode', type=str, default='train',
                         choices=['train', 'predict', 'evaluate'],
@@ -33,6 +33,11 @@ def parse_arguments():
     parser.add_argument('--models', type=str, default='all',
                         help='Models to train (comma-separated): rf,gb,xgb,lgb,cat,nn,all')
 
+    # Add the new model_type argument
+    parser.add_argument('--model_type', type=str, default='all',
+                        choices=['ml', 'dl', 'all'],
+                        help='Type of models to train: ml (Machine Learning only), dl (Deep Learning only), or all')
+
     parser.add_argument('--nn_type', type=str, default='mlp',
                         choices=['mlp', 'lstm', 'cnn', 'transformer'],
                         help='Type of neural network to use')
@@ -43,9 +48,7 @@ def parse_arguments():
     parser.add_argument('--random_state', type=int, default=42,
                         help='Random seed for reproducibility')
 
-    parser.add_argument('--model_type', type=str, default='all',
-                        choices=['ml', 'dl', 'all'],
-                        help='Type of models to train: ml (Machine Learning only), dl (Deep Learning only), or all')
+
 
     return parser.parse_args()
 

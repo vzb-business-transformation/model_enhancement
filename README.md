@@ -50,6 +50,15 @@ To train models on your data:
 
 ```bash
 python main.py --data_file path/to/your/data.csv --mode train --models all
+
+# To run only machine learning models
+python main.py --mode train --output_dir results --model_type ml
+
+# To run only deep learning models
+python main.py --mode train --output_dir results --model_type dl
+
+# To run both (default behavior)
+python main.py --mode train --output_dir results --model_type all
 ```
 
 Options:
