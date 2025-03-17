@@ -43,6 +43,10 @@ def parse_arguments():
     parser.add_argument('--random_state', type=int, default=42,
                         help='Random seed for reproducibility')
 
+    parser.add_argument('--model_type', type=str, default='all',
+                        choices=['ml', 'dl', 'all'],
+                        help='Type of models to train: ml (Machine Learning only), dl (Deep Learning only), or all')
+
     return parser.parse_args()
 
 
@@ -92,15 +96,29 @@ def train_pipeline(args):
     print(f"Final feature set: {X_train_final.shape[1]} features")
 
     # 7. Determine which models to train
-    models_to_train = []
-    if args.models == 'all':
+    # models_to_train = []
+    # if args.models == 'all':
+    #     models_to_train = ['rf', 'gb', 'xgb', 'lgb', 'cat']
+    #     train_nn = True
+    # else:
+    #     model_list = args.models.split(',')
+    #     ml_model_types = ['rf', 'gb', 'xgb', 'lgb', 'cat']
+    #     models_to_train = [m for m in model_list if m in ml_model_types]
+    #     train_nn = 'nn' in model_list
+
+    # Determine which models to train based on model_type
+    if args.model_type == 'ml':
+        # Only train ML models
+        models_to_train = ['rf', 'gb', 'xgb', 'lgb', 'cat']
+        train_nn = False
+    elif args.model_type == 'dl':
+        # Only train DL models
+        models_to_train = []
+        train_nn = True
+    else:  # 'all'
+        # Train both ML and DL models
         models_to_train = ['rf', 'gb', 'xgb', 'lgb', 'cat']
         train_nn = True
-    else:
-        model_list = args.models.split(',')
-        ml_model_types = ['rf', 'gb', 'xgb', 'lgb', 'cat']
-        models_to_train = [m for m in model_list if m in ml_model_types]
-        train_nn = 'nn' in model_list
 
     # 8. Train ML models
     trained_models = ml_models.train_all_models(X_train_final, y_train, models_to_train=models_to_train)
