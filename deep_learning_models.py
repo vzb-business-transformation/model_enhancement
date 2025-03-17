@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+import time
 
 
 class DLModels:
@@ -219,9 +220,9 @@ class DLModels:
 
     def train_model(self, model, X_train, y_train, X_val=None, y_val=None,
                     epochs=100, batch_size=32, learning_rate=0.001,
-                    patience=10, verbose=True):
+                    patience=10, verbose=True, max_time_seconds=3600):  # 1 hour default timeout
         """
-        Train a PyTorch model.
+        Train a PyTorch model with timeout functionality.
 
         Args:
             model: PyTorch model
@@ -234,11 +235,16 @@ class DLModels:
             learning_rate: Learning rate for optimizer
             patience: Early stopping patience
             verbose: Whether to print progress
+            max_time_seconds: Maximum training time in seconds
 
         Returns:
             Trained model and training history
         """
+        # Record start time for timeout
+        start_time = time.time()
+
         # Convert data to tensors
+        print(f"Converting data to tensors...")
         X_train_tensor = torch.tensor(X_train, dtype=torch.float32).to(self.device)
         y_train_tensor = torch.tensor(y_train.values, dtype=torch.float32).reshape(-1, 1).to(self.device)
 
@@ -265,17 +271,37 @@ class DLModels:
         }
 
         # Training loop
+        print(f"Starting training loop...")
         for epoch in range(epochs):
+            # Check if timeout has been reached
+            if time.time() - start_time > max_time_seconds:
+                print(f"Training timed out after {max_time_seconds} seconds")
+                break
+
             model.train()
 
             # Create mini-batches
             permutation = torch.randperm(X_train_tensor.size(0))
             train_loss = 0.0
 
+            # Add more detailed progress information
+            num_batches = (X_train_tensor.size(0) + batch_size - 1) // batch_size
+
             for i in range(0, X_train_tensor.size(0), batch_size):
+                # Check if timeout has been reached (also check within epoch)
+                if time.time() - start_time > max_time_seconds:
+                    print(f"Training timed out during epoch {epoch + 1}")
+                    break
+
                 # Get batch indices
                 indices = permutation[i:i + batch_size]
                 batch_x, batch_y = X_train_tensor[indices], y_train_tensor[indices]
+
+                # Print progress for large datasets
+                if verbose and i % (10 * batch_size) == 0:
+                    batch_num = i // batch_size + 1
+                    print(f"  Epoch {epoch + 1}/{epochs}, Batch {batch_num}/{num_batches} "
+                          f"({time.time() - start_time:.1f}s elapsed)")
 
                 # Zero the gradients
                 optimizer.zero_grad()
@@ -310,8 +336,9 @@ class DLModels:
                 else:
                     early_stop_counter += 1
 
-                if verbose and (epoch + 1) % 10 == 0:
-                    print(f'Epoch {epoch + 1}/{epochs}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}')
+                if verbose:
+                    print(f'Epoch {epoch + 1}/{epochs}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, '
+                          f'Time: {time.time() - start_time:.1f}s')
 
                 # Check for early stopping
                 if early_stop_counter >= patience:
@@ -319,15 +346,19 @@ class DLModels:
                         print(f'Early stopping at epoch {epoch + 1}')
                     break
             else:
-                if verbose and (epoch + 1) % 10 == 0:
-                    print(f'Epoch {epoch + 1}/{epochs}, Train Loss: {train_loss:.4f}')
+                if verbose:
+                    print(f'Epoch {epoch + 1}/{epochs}, Train Loss: {train_loss:.4f}, '
+                          f'Time: {time.time() - start_time:.1f}s')
 
         # Load best model if available
         if has_validation and best_model is not None:
             model.load_state_dict(best_model)
 
-        return model, history
+        # Final stats
+        training_time = time.time() - start_time
+        print(f"Training completed in {training_time:.2f} seconds")
 
+        return model, history
     def evaluate_model(self, model, X_test, y_test):
         """
         Evaluate a trained PyTorch model.
