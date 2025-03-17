@@ -397,8 +397,10 @@ class DataProcessor:
         # Create a copy of the dataframe to avoid modifying the original
         df = df.copy()
 
+        target_exists = target_col in df.columns
+
         # Initial target column check
-        if target_col in df.columns:
+        if target_exists in df.columns:
             print(f"Initial - Target column '{target_col}' exists with {df[target_col].notna().sum()} non-NaN values")
         else:
             print(f"WARNING: Target column '{target_col}' not found in initial dataframe")
@@ -465,7 +467,8 @@ class DataProcessor:
         # 4. Add engineered features
 
         df = self.engineer_features(df)
-        print(f"After feature engineering - Target column NaN count: {df[target_col].isna().sum()}")
+        if target_exists and target_col in df.columns:
+            print(f"After feature engineering - Target column NaN count: {df[target_col].isna().sum()}")
 
         # 5. Drop unnecessary columns
         columns_to_drop = [
