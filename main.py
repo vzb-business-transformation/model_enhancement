@@ -271,6 +271,41 @@ def evaluate_pipeline(args):
     return results
 
 
+def save_results_summary(args, results, feature_importance, data_shape, start_time):
+    """Save a summary of training results"""
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = os.path.join(args.output_dir, f'training_summary_{timestamp}.txt')
+
+    with open(output_file, 'w') as f:
+        f.write("=== Circuit Prediction Training Summary ===\n")
+        f.write(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+
+        f.write("=== Training Configuration ===\n")
+        f.write(f"Target variable: {args.target}\n")
+        f.write(f"Models trained: {args.models}\n")
+        f.write(f"Neural network type: {args.nn_type if 'nn' in args.models or args.models == 'all' else 'None'}\n")
+        f.write(f"Random seed: {args.random_state}\n\n")
+
+        f.write("=== Data Statistics ===\n")
+        f.write(f"Final feature count: {data_shape[1]}\n\n")
+
+        f.write("=== Model Performance ===\n")
+        for model_name, metrics in results.items():
+            f.write(f"\n{model_name}:\n")
+            f.write("-" * (len(model_name) + 1) + "\n")
+            for metric_name, value in metrics.items():
+                f.write(f"{metric_name}: {value:.4f}\n")
+
+        f.write("\n=== Top 20 Important Features ===\n")
+        if feature_importance and 'rf' in feature_importance:
+            f.write("\nRandom Forest Feature Importance:\n")
+            f.write(feature_importance['rf'].head(20).to_string())
+
+        f.write(f"\n\nTotal training time: {time.time() - start_time:.2f} seconds\n")
+
+    print(f"Training summary saved to {output_file}")
+
+
 def main():
     print("Starting main function...")
 
