@@ -171,3 +171,61 @@ plt.xlabel('Importance')
 plt.tight_layout()
 plt.savefig('rf_feature_importance.png')  # Save to file
 plt.show()  # Display plot
+
+
+def align_features_with_model(new_data_processed, model):
+    """
+    Align features in new data with those the model was trained on.
+
+    Args:
+        new_data_processed: Processed data for prediction
+        model: Trained model
+
+    Returns:
+        DataFrame with aligned features
+    """
+    # Get the features expected by the model
+    if hasattr(model, 'feature_names_in_'):
+        expected_features = model.feature_names_in_
+    elif hasattr(model, 'get_booster'):
+        expected_features = model.get_booster().feature_names
+    elif hasattr(model, 'feature_importances_'):
+        expected_features = model.feature_names
+    else:
+        raise ValueError("Cannot determine model features")
+
+    # Create a DataFrame with all expected features initialized to 0
+    aligned_data = pd.DataFrame(0, index=new_data_processed.index, columns=expected_features)
+
+    # Copy values from processed data where features match
+    for col in new_data_processed.columns:
+        if col in aligned_data.columns:
+            aligned_data[col] = new_data_processed[col]
+
+    # Log which features were missing and added
+    missing_features = [f for f in expected_features if f not in new_data_processed.columns]
+    extra_features = [f for f in new_data_processed.columns if f not in expected_features]
+
+    print(f"Added {len(missing_features)} missing features")
+    print(f"Excluded {len(extra_features)} extra features")
+
+    return aligned_data
+
+
+# Load your model
+model_path = 'results/models/'
+xgb_loaded_model = joblib.load(model_path + 'xgb_model.joblib')  # or whichever model you want to use
+
+# Preprocess your new data
+# Add a dummy target column if needed
+frn_data['DISCO_DURATION'] = 0  # Add dummy target
+processed_data = preprocessor.preprocess_data(frn_data, is_training=False)
+# Remove target column if it exists
+if 'DISCO_DURATION' in processed_data.columns:
+    processed_data = processed_data.drop(columns=['DISCO_DURATION'])
+
+# Align the features with what the model expects
+aligned_data = align_features_with_model(processed_data, xgb_loaded_model)
+
+# Now you can make predictions
+predictions = xgb_loaded_model.predict(aligned_data)
