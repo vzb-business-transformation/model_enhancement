@@ -1,14 +1,142 @@
+After one-hot encoding - Target column exists: True
+  Target column non-NaN values: 47939
+Preprocessing complete. Final shape: (47939, 119)
+After distribution - Target column NaN count: 0
+Final preprocessed data - Target column exists: True
+  Target column non-NaN values: 47939 out of 47939 rows
+Preparing train/test split...
 Target column 'DISCO_DURATION' stats:
   - Data type: float64
   - NaN count: 0
-  - Total rows: 23940
+  - Total rows: 47939
   - Min value: -3.1
   - Max value: 33.3
-  - Mean value: 1.1549456975772765
+  - Mean value: 1.165764826133211
+Train set shape: (38351, 118)
+Test set shape: (9588, 118)
+Selecting features using rf method...
+Selected 57 features out of 118
+Removing highly correlated features above 0.95...
+Dropping 8 highly correlated features
+Final feature set: 49 features
+Training multiple models...
+
 
 
 Training rf model...
 Fitting 5 folds for each of 100 candidates, totalling 500 fits
-rf training completed in 1430.48 seconds
+rf training completed in 2981.11 seconds
 Best parameters: {'n_estimators': 1000, 'min_samples_split': 2, 'min_samples_leaf': 1, 'max_features': 'sqrt', 'max_depth': None, 'bootstrap': False}
-Best cross-validation score: 0.8011
+Best cross-validation score: 0.8718
+
+Training gb model...
+Fitting 5 folds for each of 100 candidates, totalling 500 fits
+gb training completed in 1138.83 seconds
+Best parameters: {'subsample': 0.8, 'n_estimators': 500, 'min_samples_split': 5, 'min_samples_leaf': 1, 'max_features': None, 'max_depth': 9, 'learning_rate': 0.05}
+Best cross-validation score: 0.8868
+
+Training xgb model...
+Fitting 5 folds for each of 100 candidates, totalling 500 fits
+xgb training completed in 164.54 seconds
+Best parameters: {'subsample': 0.9, 'n_estimators': 1000, 'min_child_weight': 1, 'max_depth': 9, 'learning_rate': 0.1, 'colsample_bytree': 0.8}
+Best cross-validation score: 0.8915
+
+Training lgb model...
+Fitting 5 folds for each of 100 candidates, totalling 500 fits
+lgb training completed in 1274.42 seconds
+Best parameters: {'subsample': 1.0, 'n_estimators': 1000, 'min_data_in_leaf': 10, 'min_child_weight': 3, 'max_depth': 9, 'learning_rate': 0.1, 'colsample_bytree': 1.0}
+Best cross-validation score: 0.8733
+
+Training cat model...
+Fitting 5 folds for each of 100 candidates, totalling 500 fits
+cat training completed in 1104.68 seconds
+Best parameters: {'learning_rate': 0.1, 'l2_leaf_reg': 3, 'iterations': 1500, 'depth': 10}
+Best cross-validation score: 0.8826
+
+Building stacked ensemble model...
+Training stacked ensemble model...
+
+Stacked Ensemble Performance:
+MAE: 0.5869
+MSE: 2.2098
+RMSE: 1.4865
+R2: 0.9163
+
+Creating weighted voting ensemble...
+Optimized weights: [0.165, 0.167, 0.168, 0.164, 0.167, 0.169]
+
+Weighted Voting Ensemble Performance:
+MAE: 0.6015
+MSE: 2.3343
+RMSE: 1.5278
+R2: 0.9116
+
+Evaluating all models...
+
+rf model performance:
+  MAE: 0.5886
+  MSE: 2.7910
+  RMSE: 1.6706
+  R2: 0.8943
+
+gb model performance:
+  MAE: 0.6628
+  MSE: 2.4028
+  RMSE: 1.5501
+  R2: 0.9090
+
+xgb model performance:
+  MAE: 0.5668
+  MSE: 2.3342
+  RMSE: 1.5278
+  R2: 0.9116
+
+lgb model performance:
+  MAE: 0.7595
+  MSE: 2.8384
+  RMSE: 1.6847
+  R2: 0.8925
+
+cat model performance:
+  MAE: 0.6698
+  MSE: 2.5195
+  RMSE: 1.5873
+  R2: 0.9045
+
+stacked_ensemble model performance:
+  MAE: 0.5869
+  MSE: 2.2098
+  RMSE: 1.4865
+  R2: 0.9163
+
+voting_ensemble model performance:
+  MAE: 0.6015
+  MSE: 2.3343
+  RMSE: 1.5278
+  R2: 0.9116
+
+Best model: stacked_ensemble with R² = 0.9163
+Data processor saved to results/models/data_processor.joblib
+
+Saving trained models...
+Model 'rf' saved to results/models/rf_model.joblib
+Model 'gb' saved to results/models/gb_model.joblib
+Model 'xgb' saved to results/models/xgb_model.joblib
+Model 'lgb' saved to results/models/lgb_model.joblib
+Model 'cat' saved to results/models/cat_model.joblib
+Model 'stacked_ensemble' saved to results/models/stacked_ensemble_model.joblib
+Model 'voting_ensemble' saved to results/models/voting_ensemble_model.joblib
+Feature importances saved to results/models/feature_importances.joblib
+Model parameters saved to results/models/model_params.joblib
+2025-03-17 09:55:59.988 python[82051:4806661] +[IMKClient subclass]: chose IMKClient_Modern
+2025-03-17 09:55:59.988 python[82051:4806661] +[IMKInputSession subclass]: chose IMKInputSession_Modern
+
+Traceback (most recent call last):
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 299, in <module>
+    main()
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 288, in main
+    train_pipeline(args)
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/main.py", line 165, in train_pipeline
+    save_results_summary(args, all_results, ml_models.feature_importances,
+NameError: name 'save_results_summary' is not defined
+(streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %

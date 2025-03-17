@@ -101,7 +101,7 @@ class DataProcessor:
                 f"Month {month_group['PROD_YR_MTH'].iloc[0]}: {len(with_order_num)} with order num, {len(without_order_num)} without")
 
             # Determine sample size (minimum monthly count)
-            min_monthly_count = 1000  # Can be adjusted
+            min_monthly_count = 2000  # Can be adjusted
             samples_per_category = min_monthly_count
 
             # Sample from each category

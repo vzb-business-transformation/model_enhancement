@@ -1,11 +1,11 @@
 .idea/
 
-
+catboost_info/
 .env
 
 .ipynb_checkpoints
 __pycache__/
-
+results/
 __pycache__/data_processing.cpython-39.pyc
 
 
