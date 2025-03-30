@@ -224,8 +224,7 @@ processed_data = preprocessor.preprocess_data(frn_data, is_training=False)
 if 'DISCO_DURATION' in processed_data.columns:
     processed_data = processed_data.drop(columns=['DISCO_DURATION'])
 
-# Align the features with what the model expects
-aligned_data = align_features_with_model(processed_data, xgb_loaded_model)
+
 
 # Now you can make predictions
 predictions = xgb_loaded_model.predict(aligned_data)
