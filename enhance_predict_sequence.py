@@ -52,6 +52,51 @@ def align_features_for_model(X, model, fill_nan = True):
 def constrain_predictions(predictions, min_val=0, max_val=365):
     return np.clip(predictions, min_val, max_val)
 
+def analyze_predictions(predictions_df, prediction_col='PREDICTED_DURATION'):
+    """
+    Analyze predictions to identify potential issues
+    
+    Args:
+        predictions_df: DataFrame with predictions
+        prediction_col: Column name for predictions
+        
+    Returns:
+        Dictionary with analysis results
+    """
+    if prediction_col not in predictions_df.columns:
+        print(f"Warning: {prediction_col} not found in predictions")
+        return {}
+    
+    # Basic statistics
+    stats = {
+        'mean': predictions_df[prediction_col].mean(),
+        'median': predictions_df[prediction_col].median(),
+        'min': predictions_df[prediction_col].min(),
+        'max': predictions_df[prediction_col].max(),
+        'std': predictions_df[prediction_col].std(),
+    }
+    
+    # Distribution
+    bins = [0, 7, 14, 30, 60, 90, 180, 365]
+    labels = ['<7 days', '7-14 days', '14-30 days', '30-60 days', '60-90 days', '90-180 days', '180-365 days']
+    
+    predictions_df['duration_bucket'] = pd.cut(
+        predictions_df[prediction_col], 
+        bins=bins, 
+        labels=labels, 
+        include_lowest=True
+    )
+    
+    distribution = predictions_df['duration_bucket'].value_counts(normalize=True) * 100
+    
+    print("Prediction Distribution:")
+    for label, pct in distribution.items():
+        print(f"  {label}: {pct:.2f}%")
+        
+    return {
+        'stats': stats,
+        'distribution': distribution.to_dict()
+    }
 
 def ensure_feature_compatibility(df, expected_features, fill_value=0):
     """
@@ -270,6 +315,21 @@ def main():
     jan_predictions.to_csv(jan_output_file, index=False)
     print(f"January predictions saved to {jan_output_file}")
     
+    # this section to analyze January predictions
+    print("\n=== Analyzing January predictions ===")
+    if 'prediction_rf' in jan_predictions.columns:
+        # Create combined prediction if it doesn't exist
+        if 'PREDICTED_DURATION' not in jan_predictions.columns:
+            # Use RF predictions or average of available models
+            pred_cols = [col for col in jan_predictions.columns if col.startswith('prediction_')]
+            if pred_cols:
+                jan_predictions['PREDICTED_DURATION'] = jan_predictions[pred_cols].mean(axis=1)
+        
+        # Now analyze
+        analyze_predictions(jan_predictions)
+    else:
+        print("No successful predictions available to analyze")
+    
     # STEP 3: Error analysis and model enhancement (if we later get actual data)
     print("\n=== STEP 3: Analyzing January prediction errors ===\n")
     
@@ -359,6 +419,21 @@ def main():
     feb_output_file = os.path.join(base_output_dir, 'february_predictions.csv')
     feb_predictions.to_csv(feb_output_file, index=False)
     print(f"February predictions saved to {feb_output_file}")
+    
+    # this section to analyze February predictions
+    print("\n=== Analyzing February predictions ===")
+    if 'prediction_cat' in feb_predictions.columns:
+        # Create combined prediction if it doesn't exist
+        if 'PREDICTED_DURATION' not in feb_predictions.columns:
+            # Use CAT predictions or average of available models
+            pred_cols = [col for col in feb_predictions.columns if col.startswith('prediction_')]
+            if pred_cols:
+                feb_predictions['PREDICTED_DURATION'] = feb_predictions[pred_cols].mean(axis=1)
+        
+        # Now analyze
+        analyze_predictions(feb_predictions)
+    else:
+        print("No successful predictions available to analyze")
     
     # STEP 5: Save summary report
     print("\n=== STEP 5: Generating summary report ===\n")
