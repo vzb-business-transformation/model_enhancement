@@ -12,6 +12,26 @@ from data_processing import DataProcessor
 from ml_models import MLModels
 from src.run_query import run_sql
 
+def ensure_feature_compatibility(df, expected_features, fill_value=0):
+    """
+    Ensure dataframe has all expected features in the correct order.
+    
+    Args:
+        df: DataFrame to check
+        expected_features: List of feature names that should be present
+        fill_value: Value to use for missing features
+        
+    Returns:
+        DataFrame with correct features
+    """
+    # Add missing features
+    for feature in expected_features:
+        if feature not in df.columns:
+            df[feature] = fill_value
+    
+    # Keep only expected features
+    return df[expected_features]
+
 def main():
     """Main function to run the sequential prediction and enhancement workflow"""
     print("\n=== Starting Circuit Prediction Enhancement Pipeline ===\n")
@@ -139,7 +159,22 @@ def main():
     jan_data['DISCO_DURATION'] = 0
     
     # Process January data
-    jan_processed = data_processor.preprocess_data(jan_data, is_training=False, target_col='DISCO_DURATION')
+    # Get list of expected features from the scaler or model
+    expected_features = data_processor.robust_scaler.feature_names_in_ if hasattr(data_processor.robust_scaler, 'feature_names_in_') else None
+    
+    if expected_features is not None:
+        # Get numeric columns that match the expected names
+        numeric_cols = [col for col in expected_features if col in jan_processed.columns]
+        
+        # Handle missing features
+        jan_processed = ensure_feature_compatibility(jan_processed, list(expected_features))
+        
+        # Now transform with scaler
+        jan_processed[expected_features] = data_processor.robust_scaler.transform(jan_processed[expected_features])
+    else:
+        # Fall back to default behavior
+        numeric_cols = jan_processed.select_dtypes(include=['int64', 'float64']).columns
+        jan_processed[numeric_cols] = data_processor.robust_scaler.transform(jan_processed[numeric_cols])
     
     # Handle feature compatibility
     # Get model's expected features
