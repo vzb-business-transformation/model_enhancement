@@ -1105,3 +1105,52 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+def align_features_for_model(X, model):
+    """
+    Align features to match exactly what the model expects.
+    
+    Args:
+        X: Input features DataFrame
+        model: The trained model with feature_names_in_ attribute
+        
+    Returns:
+        DataFrame with exactly the features the model expects in the right order
+    """
+    # Get expected feature set from model
+    if hasattr(model, 'feature_names_in_'):
+        expected_features = model.feature_names_in_
+    else:
+        # Try to extract from model object in other ways
+        print("Model doesn't have feature_names_in_ attribute, prediction may fail")
+        return X
+    
+    # Create new DataFrame with right features
+    result = pd.DataFrame(index=X.index)
+    
+    # First add all expected features
+    for feature in expected_features:
+        if feature in X.columns:
+            result[feature] = X[feature]
+        else:
+            print(f"Adding missing feature: {feature}")
+            result[feature] = 0
+            
+    # Return aligned features
+    return result
+
+
+# Make predictions with each model
+for name, model in ml_models.best_models.items():
+    try:
+        # Align features to match model expectations exactly
+        X_aligned = align_features_for_model(X_jan, model)
+        
+        # Make prediction
+        preds = model.predict(X_aligned)
+        jan_predictions[f'prediction_{name}'] = preds
+        print(f"Successfully predicted with {name} model")
+    except Exception as e:
+        print(f"Error predicting with {name} model: {str(e)}")
