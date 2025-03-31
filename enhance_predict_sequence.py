@@ -140,7 +140,7 @@ def main():
     BIZ_CASE, FIRST_LAT, FIRST_LGNTD,MIG_STATUS,
     SECOND_LAT, SECOND_LGNTD, IEN_PROV, DIV_PORT, DIV_ACCESS, a.PROD_YR_MTH
     from edw_sr_vw.rt_cir_single_row_addr a
-    inner join (
+    left join (
         select conv_naspid NASP_ID,CIR_ID,INST_ORD_NUM,CHG_ORD_NUM,MIG_STATUS,DISCO_ORD_NUM,DISCO_DATE_ORDERING_STRT
         from EDW_GLOB_OPS_VW.CIRCUIT_TDM_TD_VW
         where report_date < (select max(report_date) from EDW_GLOB_OPS_VW.CIRCUIT_TDM_TD_VW)
@@ -148,7 +148,7 @@ def main():
     ) b ON a.CIR_ID = b.CIR_ID
     where PROD_YR_MTH = 202501
     and REV_LOC_DIV_CODE in ('LRG','PUB','WHL','SAM')
-    and DISCO_ORD_NUM is null
+    and MIG_STATUS = 'MIGRATION HAS NOT STARTED'
     """
     
     print("Loading January data...")
@@ -250,7 +250,7 @@ def main():
     BIZ_CASE, FIRST_LAT, FIRST_LGNTD,MIG_STATUS,
     SECOND_LAT, SECOND_LGNTD, IEN_PROV, DIV_PORT, DIV_ACCESS, a.PROD_YR_MTH
     from edw_sr_vw.rt_cir_single_row_addr a
-    inner join (
+    left join (
         select conv_naspid NASP_ID,CIR_ID,INST_ORD_NUM,CHG_ORD_NUM,MIG_STATUS,DISCO_ORD_NUM,DISCO_DATE_ORDERING_STRT
         from EDW_GLOB_OPS_VW.CIRCUIT_TDM_TD_VW
         where report_date < (select max(report_date) from EDW_GLOB_OPS_VW.CIRCUIT_TDM_TD_VW)
@@ -258,7 +258,7 @@ def main():
     ) b ON a.CIR_ID = b.CIR_ID
     where PROD_YR_MTH = 202502
     and REV_LOC_DIV_CODE in ('LRG','PUB','WHL','SAM')
-    and DISCO_ORD_NUM is null
+    and MIG_STATUS = 'MIGRATION HAS NOT STARTED'
     """
     
     print("Loading February data...")
