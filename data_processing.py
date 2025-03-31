@@ -552,6 +552,7 @@ class DataProcessor:
         if target_col in df.columns:
             print(f"  Target column non-NaN values: {df[target_col].notna().sum()}")
 
+       
         # 9. Handle outliers with robust scaling instead of removal
         numeric_cols = df.select_dtypes(include=['int64', 'float64']).columns
         if is_training:
@@ -560,7 +561,36 @@ class DataProcessor:
         else:
             # In prediction mode, use the pre-fit scaler
             if hasattr(self, 'robust_scaler') and self.robust_scaler is not None:
-                df[numeric_cols] = self.robust_scaler.transform(df[numeric_cols])
+                if hasattr(self.robust_scaler, 'feature_names_in_'):
+                    # Get the features the scaler was trained on
+                    expected_features = self.robust_scaler.feature_names_in_
+                    
+                    # Create a new dataframe with expected columns
+                    transform_df = pd.DataFrame(index=df.index)
+                    
+                    # Add existing features
+                    for feature in expected_features:
+                        if feature in df.columns:
+                            transform_df[feature] = df[feature]
+                        else:
+                            # Add missing features with zeros
+                            transform_df[feature] = 0
+                    
+                    # Apply transformation
+                    transformed_data = self.robust_scaler.transform(transform_df)
+                    
+                    # Convert back to DataFrame and update original dataframe
+                    transformed_df = pd.DataFrame(transformed_data, columns=expected_features, index=df.index)
+                    
+                    # Update original dataframe with transformed values
+                    for col in expected_features:
+                        if col in df.columns:
+                            df[col] = transformed_df[col]
+                        else:
+                            df[col] = transformed_df[col]  # Add new column
+                else:
+                    # Fall back to original behavior if feature names not available
+                    df[numeric_cols] = self.robust_scaler.transform(df[numeric_cols])
             else:
                 print("Warning: RobustScaler not fitted. Skipping transformation.")
 
