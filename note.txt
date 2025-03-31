@@ -1,5 +1,5 @@
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement % python -m enhance_predict_sequence
-run_sql took 52.10 seconds to run.
+run_sql took 51.10 seconds to run.
 
 === Starting Circuit Prediction Enhancement Pipeline ===
 
@@ -23,45 +23,18 @@ Base models loaded successfully
 === STEP 2: Predicting January disconnect durations ===
 
 Loading January data...
-run_sql took 2.84 seconds to run.
+run_sql took 9.95 seconds to run.
 January active circuits: 1 records
-Starting data preprocessing...
-WARNING: Target column 'DISCO_DURATION' not found in initial dataframe
-After distribution - Target column has 1 non-NaN values out of 1 rows
-Engineering features...
-Feature engineering complete. New shape: (1, 85)
-After feature engineering - Target column NaN count: 0
-Before one-hot encoding - Target column exists: True
-  Target column type: int64
-  Target column non-NaN values: 1
-Categorical columns to encode: ['DOM_INTL_FLAG', 'INT_EXT_FLAG', 'REV_TYPE_FLAG', 'COST_TYPE_FLAG', 'FIRST_ADDR_TYPE_CODE', 'FIRST_ONNET', 'FIRST_INREGION', 'FIRST_XOLIT', 'ONNET_PROV', 'COMPANY_CODE', 'VRD_FLAG', 'OPCO_REV', 'IN_FOOTPRINT', 'NASP_TYPE', 'CIR_TECH_TYPE', 'CIR_BILL_TYPE', 'PROGRAM', 'BIZ_CASE', 'FIRST_LAT', 'FIRST_LGNTD', 'IEN_PROV', 'SPEED_TIER', 'TECH_BILL_COMBO']
-After one-hot encoding - Target column exists: True
-  Target column non-NaN values: 1
 Traceback (most recent call last):
   File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/runpy.py", line 197, in _run_module_as_main
     return _run_code(code, main_globals, None,
   File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/runpy.py", line 87, in _run_code
     exec(code, run_globals)
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/enhance_predict_sequence.py", line 333, in <module>
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/enhance_predict_sequence.py", line 368, in <module>
     main()
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/enhance_predict_sequence.py", line 142, in main
-    jan_processed = data_processor.preprocess_data(jan_data, is_training=False, target_col='DISCO_DURATION')
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/data_processing.py", line 563, in preprocess_data
-    df[numeric_cols] = self.robust_scaler.transform(df[numeric_cols])
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/utils/_set_output.py", line 295, in wrapped
-    data_to_wrap = f(self, X, *args, **kwargs)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/preprocessing/_data.py", line 1652, in transform
-    X = self._validate_data(
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/base.py", line 608, in _validate_data
-    self._check_feature_names(X, reset=reset)
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/site-packages/sklearn/base.py", line 535, in _check_feature_names
-    raise ValueError(message)
-ValueError: The feature names should match those that were passed during fit.
-Feature names seen at fit time, yet now missing:
-- ACCESS_DISC_RATE
-- ENDPOINT_DISTANCE_KM
-- FIRST_LAT
-- FIRST_LGNTD
-- PORT_DISC_RATE
-
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/enhance_predict_sequence.py", line 167, in main
+    numeric_cols = [col for col in expected_features if col in jan_processed.columns]
+  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/enhance_predict_sequence.py", line 167, in <listcomp>
+    numeric_cols = [col for col in expected_features if col in jan_processed.columns]
+NameError: free variable 'jan_processed' referenced before assignment in enclosing scope
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %
