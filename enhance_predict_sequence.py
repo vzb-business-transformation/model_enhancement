@@ -159,12 +159,14 @@ def main():
     jan_data['DISCO_DURATION'] = 0
     
     # Process January data
+    jan_processed = data_processor.preprocess_data(jan_data, is_training=False, target_col='DISCO_DURATION')
+
     # Get list of expected features from the scaler or model
     expected_features = data_processor.robust_scaler.feature_names_in_ if hasattr(data_processor.robust_scaler, 'feature_names_in_') else None
     
     if expected_features is not None:
         # Get numeric columns that match the expected names
-        numeric_cols = [col for col in expected_features if col in jan_processed.columns]
+        # numeric_cols = [col for col in expected_features if col in jan_processed.columns]
         
         # Handle missing features
         jan_processed = ensure_feature_compatibility(jan_processed, list(expected_features))
