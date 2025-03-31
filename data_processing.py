@@ -486,9 +486,13 @@ class DataProcessor:
         categorical_cols = df.select_dtypes(include=['object', 'category']).columns
         for col in categorical_cols:
             if df[col].isna().any():
-                # For categorical columns with missing values
-                mode_value = df[col].mode()[0] if not df[col].mode().empty else "Unknown"
-                df[col] = df[col].fillna(mode_value)
+                if pd.api.types.is_categorical_dtype(df[col]):
+                    df[col] = df[col].cat.add_categories(['Unknown'])
+                    df[col] = df[col].fillna('Unknown')
+                else:
+                    # For categorical columns with missing values
+                    mode_value = df[col].mode()[0] if not df[col].mode().empty else "Unknown"
+                    df[col] = df[col].fillna(mode_value)
 
         # 7. Advanced categorical encoding for high-cardinality features
         if is_training and target_col in df.columns:
