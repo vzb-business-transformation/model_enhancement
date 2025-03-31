@@ -13,7 +13,7 @@ from ml_models import MLModels
 from src.run_query import run_sql
 
 
-def align_features_for_model(X, model):
+def align_features_for_model(X, model, fill_nan = True):
     """
     Align features to match exactly what the model expects.
 
@@ -43,8 +43,14 @@ def align_features_for_model(X, model):
             print(f"Adding missing feature: {feature}")
             result[feature] = 0
 
+    if fill_nan:
+        result = result.fillna(0)
+
     # Return aligned features
     return result
+
+def constrain_predictions(predictions, min_val=0, max_val=365):
+    return np.clip(predictions, min_val, max_val)
 
 
 def ensure_feature_compatibility(df, expected_features, fill_value=0):
@@ -243,9 +249,12 @@ def main():
     # Make predictions with each model
     for name, model in ml_models.best_models.items():
         try:
-            X_aligned = align_features_for_model(X_jan, model)
+            X_aligned = align_features_for_model(X_jan, model, fill_nan=True)
 
             preds = model.predict(X_aligned)
+
+            preds = constrain_predictions(preds, min_val=0, max_val=365)
+
             jan_predictions[f'prediction_{name}'] = preds
             print(f"Successfully predicted with {name} model")
         except Exception as e:
