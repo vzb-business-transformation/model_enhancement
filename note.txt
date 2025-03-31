@@ -1,5 +1,5 @@
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement % python -m enhance_predict_sequence
-run_sql took 44.23 seconds to run.
+run_sql took 53.36 seconds to run.
 
 === Starting Circuit Prediction Enhancement Pipeline ===
 
@@ -23,93 +23,116 @@ Base models loaded successfully
 === STEP 2: Predicting January disconnect durations ===
 
 Loading January data...
-run_sql took 6.49 seconds to run.
-January active circuits: 2089 records
+run_sql took 6.53 seconds to run.
+January active circuits: 2090 records
 Starting data preprocessing...
 WARNING: Target column 'DISCO_DURATION' not found in initial dataframe
-After distribution - Target column has 2089 non-NaN values out of 2089 rows
+After distribution - Target column has 2090 non-NaN values out of 2090 rows
 Engineering features...
 Warning: Could not create distance buckets: Bin labels must be one fewer than the number of bin edges
-Feature engineering complete. New shape: (2089, 93)
+Feature engineering complete. New shape: (2090, 93)
 After feature engineering - Target column NaN count: 0
 Before one-hot encoding - Target column exists: True
   Target column type: int64
-  Target column non-NaN values: 2089
+  Target column non-NaN values: 2090
 Categorical columns to encode: ['DOM_INTL_FLAG', 'INT_EXT_FLAG', 'REV_TYPE_FLAG', 'COST_TYPE_FLAG', 'FIRST_ADDR_TYPE_CODE', 'FIRST_ONNET', 'FIRST_INREGION', 'FIRST_XOLIT', 'ONNET_PROV', 'COMPANY_CODE', 'VRD_FLAG', 'OPCO_REV', 'IN_FOOTPRINT', 'NASP_TYPE', 'CIR_TECH_TYPE', 'CIR_BILL_TYPE', 'PROGRAM', 'BIZ_CASE', 'IEN_PROV', 'DISTANCE_BUCKET', 'RPTG_CIR_SPEED_TIER', 'ACCESS_SPEED_TIER', 'PORT_SPEED_TIER', 'PVC_CAR_SPEED_TIER', 'SPEED_TIER', 'TECH_BILL_COMBO']
 After one-hot encoding - Target column exists: True
-  Target column non-NaN values: 2089
-Preprocessing complete. Final shape: (2089, 117)
+  Target column non-NaN values: 2090
+Preprocessing complete. Final shape: (2090, 118)
 After distribution - Target column NaN count: 0
 Final preprocessed data - Target column exists: True
-  Target column non-NaN values: 2089 out of 2089 rows
-Error predicting with voting_ensemble model: The feature names should match those that were passed during fit.
-Feature names unseen at fit time:
-- ACCESS_DISC
-- ACCESS_DISC_RATE
-- ACCESS_SPEED_SQUARED
-- DISCONNECT_COMPLEXITY
-- HAS_MULTIPLE_DISC
-- ...
-Feature names seen at fit time, yet now missing:
-- ACCESS_SPEED_TIER_Medium
-- CIR_TECH_TYPE_TDM
-- COMPANY_CODE_XO
-- COST_TYPE_FLAG_C
-- COST_TYPE_FLAG_S
-- ...
-
-Error predicting with stacked_ensemble model: The feature names should match those that were passed during fit.
-Feature names unseen at fit time:
-- ACCESS_DISC
-- ACCESS_DISC_RATE
-- ACCESS_SPEED_SQUARED
-- DISCONNECT_COMPLEXITY
-- HAS_MULTIPLE_DISC
-- ...
-Feature names seen at fit time, yet now missing:
-- ACCESS_SPEED_TIER_Medium
-- CIR_TECH_TYPE_TDM
-- COMPANY_CODE_XO
-- COST_TYPE_FLAG_C
-- COST_TYPE_FLAG_S
-- ...
-
-Error predicting with xgb model: feature_names mismatch: ['LVL_4_PRD_NM', 'VRTCL_MRKT_NAME', 'SALES_TIER', 'SR_CRCTP', 'RPTG_CRCTP', 'RPTG_CIR_SPEED', 'ACCESS_SPEED', 'PORT_SPEED', 'PVC_CAR_SPEED', 'MARGIN', 'FIRST_LAT', 'FIRST_LGNTD', 'PROD_YR_MTH', 'MONTH', 'VENDOR_COUNT', 'MONTH_SIN', 'MONTH_COS', 'CIRCUIT_AGE_DAYS', 'INST_MONTH', 'INST_DAY_OF_WEEK', 'ENDPOINT_DISTANCE_KM', 'SPEED_RATIO', 'SPEED_VARIATION', 'MAX_SPEED', 'TECH_ONNET_COMBO', 'MARKET_TIER_COMBO', 'MARGIN_SQUARED', 'LOG_MARGIN', 'LOG_ACCESS_SPEED', 'LOG_PORT_SPEED', 'REV_TYPE_FLAG_C ', 'COST_TYPE_FLAG_C ', 'COST_TYPE_FLAG_S ', 'COST_TYPE_FLAG_U ', 'FIRST_ADDR_TYPE_CODE_A', 'FIRST_ADDR_TYPE_CODE_SITE', 'FIRST_ONNET_Y ', 'FIRST_INREGION_OR', 'FIRST_XOLIT_Y ', 'COMPANY_CODE_XO', 'IN_FOOTPRINT_N ', 'IN_FOOTPRINT_Y ', 'CIR_TECH_TYPE_TDM', 'PROGRAM_NO ACTION', 'ACCESS_SPEED_TIER_Medium', 'PORT_SPEED_TIER_Medium'] ['LVL_4_PRD_NM', 'VRTCL_MRKT_NAME', 'SALES_TIER', 'SR_CRCTP', 'RPTG_CRCTP', 'RPTG_CIR_SPEED', 'ACCESS_SPEED', 'PORT_SPEED', 'PVC_CAR_SPEED', 'ACCESS_DISC', 'PORT_DISC', 'PVC_CAR_DISC', 'OTHER_DISC', 'OTHER_ADJ', 'MARGIN', 'FIRST_LAT', 'FIRST_LGNTD', 'PROD_YR_MTH', 'MONTH', 'YEAR', 'IS_QUARTER_END', 'IS_YEAR_END', 'VENDOR_COUNT', 'MONTH_SIN', 'MONTH_COS', 'CIRCUIT_AGE_DAYS', 'INST_MONTH', 'INST_QUARTER', 'INST_DAY_OF_WEEK', 'ENDPOINT_DISTANCE_KM', 'SPEED_RATIO', 'SPEED_VARIATION', 'MAX_SPEED', 'TOTAL_DISC', 'HAS_MULTIPLE_DISC', 'ACCESS_DISC_RATE', 'PORT_DISC_RATE', 'DISCONNECT_COMPLEXITY', 'MARGIN_SPEED_INTERACTION', 'MARGIN_DISCONNECT_RATIO', 'TECH_ONNET_COMBO', 'MARKET_TIER_COMBO', 'MARGIN_SQUARED', 'LOG_MARGIN', 'ACCESS_SPEED_SQUARED', 'LOG_ACCESS_SPEED', 'PORT_SPEED_SQUARED', 'LOG_PORT_SPEED', 'TOTAL_DISC_SQUARED', 'LOG_TOTAL_DISC']
-expected REV_TYPE_FLAG_C , CIR_TECH_TYPE_TDM, PORT_SPEED_TIER_Medium, COST_TYPE_FLAG_S , FIRST_ADDR_TYPE_CODE_SITE, IN_FOOTPRINT_N , COMPANY_CODE_XO, COST_TYPE_FLAG_C , FIRST_INREGION_OR, IN_FOOTPRINT_Y , PROGRAM_NO ACTION, FIRST_ADDR_TYPE_CODE_A, COST_TYPE_FLAG_U , FIRST_ONNET_Y , ACCESS_SPEED_TIER_Medium, FIRST_XOLIT_Y  in input data
-training data did not have the following fields: HAS_MULTIPLE_DISC, ACCESS_DISC, OTHER_DISC, TOTAL_DISC, IS_YEAR_END, LOG_TOTAL_DISC, YEAR, PORT_DISC, OTHER_ADJ, INST_QUARTER, PORT_DISC_RATE, IS_QUARTER_END, PVC_CAR_DISC, PORT_SPEED_SQUARED, MARGIN_DISCONNECT_RATIO, TOTAL_DISC_SQUARED, MARGIN_SPEED_INTERACTION, ACCESS_SPEED_SQUARED, DISCONNECT_COMPLEXITY, ACCESS_DISC_RATE
-Error predicting with rf model: The feature names should match those that were passed during fit.
-Feature names unseen at fit time:
-- ACCESS_DISC
-- ACCESS_DISC_RATE
-- ACCESS_SPEED_SQUARED
-- DISCONNECT_COMPLEXITY
-- HAS_MULTIPLE_DISC
-- ...
-Feature names seen at fit time, yet now missing:
-- ACCESS_SPEED_TIER_Medium
-- CIR_TECH_TYPE_TDM
-- COMPANY_CODE_XO
-- COST_TYPE_FLAG_C
-- COST_TYPE_FLAG_S
-- ...
-
+  Target column non-NaN values: 2090 out of 2090 rows
+Adding missing feature: REV_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_S
+Adding missing feature: COST_TYPE_FLAG_U
+Adding missing feature: FIRST_ADDR_TYPE_CODE_A
+Adding missing feature: FIRST_ADDR_TYPE_CODE_SITE
+Adding missing feature: FIRST_ONNET_Y
+Adding missing feature: FIRST_INREGION_OR
+Adding missing feature: FIRST_XOLIT_Y
+Adding missing feature: COMPANY_CODE_XO
+Adding missing feature: IN_FOOTPRINT_N
+Adding missing feature: IN_FOOTPRINT_Y
+Adding missing feature: CIR_TECH_TYPE_TDM
+Adding missing feature: PROGRAM_NO ACTION
+Adding missing feature: ACCESS_SPEED_TIER_Medium
+Adding missing feature: PORT_SPEED_TIER_Medium
+Error predicting with voting_ensemble model: Input X contains NaN.
+GradientBoostingRegressor does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values
+Adding missing feature: REV_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_S
+Adding missing feature: COST_TYPE_FLAG_U
+Adding missing feature: FIRST_ADDR_TYPE_CODE_A
+Adding missing feature: FIRST_ADDR_TYPE_CODE_SITE
+Adding missing feature: FIRST_ONNET_Y
+Adding missing feature: FIRST_INREGION_OR
+Adding missing feature: FIRST_XOLIT_Y
+Adding missing feature: COMPANY_CODE_XO
+Adding missing feature: IN_FOOTPRINT_N
+Adding missing feature: IN_FOOTPRINT_Y
+Adding missing feature: CIR_TECH_TYPE_TDM
+Adding missing feature: PROGRAM_NO ACTION
+Adding missing feature: ACCESS_SPEED_TIER_Medium
+Adding missing feature: PORT_SPEED_TIER_Medium
+Error predicting with stacked_ensemble model: Input X contains NaN.
+GradientBoostingRegressor does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values
+Adding missing feature: REV_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_S
+Adding missing feature: COST_TYPE_FLAG_U
+Adding missing feature: FIRST_ADDR_TYPE_CODE_A
+Adding missing feature: FIRST_ADDR_TYPE_CODE_SITE
+Adding missing feature: FIRST_ONNET_Y
+Adding missing feature: FIRST_INREGION_OR
+Adding missing feature: FIRST_XOLIT_Y
+Adding missing feature: COMPANY_CODE_XO
+Adding missing feature: IN_FOOTPRINT_N
+Adding missing feature: IN_FOOTPRINT_Y
+Adding missing feature: CIR_TECH_TYPE_TDM
+Adding missing feature: PROGRAM_NO ACTION
+Adding missing feature: ACCESS_SPEED_TIER_Medium
+Adding missing feature: PORT_SPEED_TIER_Medium
+Successfully predicted with xgb model
+Adding missing feature: REV_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_S
+Adding missing feature: COST_TYPE_FLAG_U
+Adding missing feature: FIRST_ADDR_TYPE_CODE_A
+Adding missing feature: FIRST_ADDR_TYPE_CODE_SITE
+Adding missing feature: FIRST_ONNET_Y
+Adding missing feature: FIRST_INREGION_OR
+Adding missing feature: FIRST_XOLIT_Y
+Adding missing feature: COMPANY_CODE_XO
+Adding missing feature: IN_FOOTPRINT_N
+Adding missing feature: IN_FOOTPRINT_Y
+Adding missing feature: CIR_TECH_TYPE_TDM
+Adding missing feature: PROGRAM_NO ACTION
+Adding missing feature: ACCESS_SPEED_TIER_Medium
+Adding missing feature: PORT_SPEED_TIER_Medium
+Successfully predicted with rf model
+Model doesn't have feature_names_in_ attribute, prediction may fail
 Error predicting with lgb model: Number of features of the model must match the input. Model n_features_ is 46 and input n_features is 50
-Error predicting with gb model: The feature names should match those that were passed during fit.
-Feature names unseen at fit time:
-- ACCESS_DISC
-- ACCESS_DISC_RATE
-- ACCESS_SPEED_SQUARED
-- DISCONNECT_COMPLEXITY
-- HAS_MULTIPLE_DISC
-- ...
-Feature names seen at fit time, yet now missing:
-- ACCESS_SPEED_TIER_Medium
-- CIR_TECH_TYPE_TDM
-- COMPANY_CODE_XO
-- COST_TYPE_FLAG_C
-- COST_TYPE_FLAG_S
-- ...
-
+Adding missing feature: REV_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_C
+Adding missing feature: COST_TYPE_FLAG_S
+Adding missing feature: COST_TYPE_FLAG_U
+Adding missing feature: FIRST_ADDR_TYPE_CODE_A
+Adding missing feature: FIRST_ADDR_TYPE_CODE_SITE
+Adding missing feature: FIRST_ONNET_Y
+Adding missing feature: FIRST_INREGION_OR
+Adding missing feature: FIRST_XOLIT_Y
+Adding missing feature: COMPANY_CODE_XO
+Adding missing feature: IN_FOOTPRINT_N
+Adding missing feature: IN_FOOTPRINT_Y
+Adding missing feature: CIR_TECH_TYPE_TDM
+Adding missing feature: PROGRAM_NO ACTION
+Adding missing feature: ACCESS_SPEED_TIER_Medium
+Adding missing feature: PORT_SPEED_TIER_Medium
+Error predicting with gb model: Input X contains NaN.
+GradientBoostingRegressor does not accept missing values encoded as NaN natively. For supervised learning, you might want to consider sklearn.ensemble.HistGradientBoostingClassifier and Regressor which accept missing values encoded as NaNs natively. Alternatively, it is possible to preprocess the data, for instance by using an imputer transformer in a pipeline or drop samples with missing values. See https://scikit-learn.org/stable/modules/impute.html You can find a list of all estimators that handle NaN values at the following page: https://scikit-learn.org/stable/modules/impute.html#estimators-that-handle-nan-values
+Model doesn't have feature_names_in_ attribute, prediction may fail
 Error predicting with cat model: /Users/zomb-ml-platform-msk/go-agent-21.2.0/pipelines/BuildMaster/catboost.git/catboost/libs/data/model_dataset_compatibility.cpp:81: At position 9 should be feature with name MARGIN (found ACCESS_DISC).
 January predictions saved to results/january/january_predictions.csv
 
@@ -122,25 +145,25 @@ When that data is available, rerun this step to enhance the model.
 === STEP 4: Predicting February disconnect durations ===
 
 Loading February data...
-run_sql took 4.99 seconds to run.
-February active circuits: 2045 records
+run_sql took 6.87 seconds to run.
+February active circuits: 2049 records
 Starting data preprocessing...
 WARNING: Target column 'DISCO_DURATION' not found in initial dataframe
-After distribution - Target column has 2045 non-NaN values out of 2045 rows
+After distribution - Target column has 2049 non-NaN values out of 2049 rows
 Engineering features...
 Warning: Could not create distance buckets: Bin labels must be one fewer than the number of bin edges
-Feature engineering complete. New shape: (2045, 93)
+Feature engineering complete. New shape: (2049, 93)
 After feature engineering - Target column NaN count: 0
 Before one-hot encoding - Target column exists: True
   Target column type: int64
-  Target column non-NaN values: 2045
+  Target column non-NaN values: 2049
 Categorical columns to encode: ['DOM_INTL_FLAG', 'INT_EXT_FLAG', 'REV_TYPE_FLAG', 'COST_TYPE_FLAG', 'FIRST_ADDR_TYPE_CODE', 'FIRST_ONNET', 'FIRST_INREGION', 'FIRST_XOLIT', 'ONNET_PROV', 'COMPANY_CODE', 'VRD_FLAG', 'OPCO_REV', 'IN_FOOTPRINT', 'NASP_TYPE', 'CIR_TECH_TYPE', 'CIR_BILL_TYPE', 'PROGRAM', 'BIZ_CASE', 'IEN_PROV', 'DISTANCE_BUCKET', 'RPTG_CIR_SPEED_TIER', 'ACCESS_SPEED_TIER', 'PORT_SPEED_TIER', 'PVC_CAR_SPEED_TIER', 'SPEED_TIER', 'TECH_BILL_COMBO']
 After one-hot encoding - Target column exists: True
-  Target column non-NaN values: 2045
-Preprocessing complete. Final shape: (2045, 117)
+  Target column non-NaN values: 2049
+Preprocessing complete. Final shape: (2049, 115)
 After distribution - Target column NaN count: 0
 Final preprocessed data - Target column exists: True
-  Target column non-NaN values: 2045 out of 2045 rows
+  Target column non-NaN values: 2049 out of 2049 rows
 Error predicting with voting_ensemble model: The feature names should match those that were passed during fit.
 Feature names unseen at fit time:
 - ACCESS_DISC
@@ -159,8 +182,8 @@ Feature names unseen at fit time:
 - ACCESS_SPEED_TIER_Low
 - ...
 
-Error predicting with xgb model: feature_names mismatch: ['LVL_4_PRD_NM', 'VRTCL_MRKT_NAME', 'SALES_TIER', 'SR_CRCTP', 'RPTG_CRCTP', 'RPTG_CIR_SPEED', 'ACCESS_SPEED', 'PORT_SPEED', 'PVC_CAR_SPEED', 'MARGIN', 'FIRST_LAT', 'FIRST_LGNTD', 'PROD_YR_MTH', 'MONTH', 'VENDOR_COUNT', 'MONTH_SIN', 'MONTH_COS', 'CIRCUIT_AGE_DAYS', 'INST_MONTH', 'INST_DAY_OF_WEEK', 'ENDPOINT_DISTANCE_KM', 'SPEED_RATIO', 'SPEED_VARIATION', 'MAX_SPEED', 'TECH_ONNET_COMBO', 'MARKET_TIER_COMBO', 'MARGIN_SQUARED', 'LOG_MARGIN', 'LOG_ACCESS_SPEED', 'LOG_PORT_SPEED', 'REV_TYPE_FLAG_C ', 'COST_TYPE_FLAG_C ', 'COST_TYPE_FLAG_S ', 'COST_TYPE_FLAG_U ', 'FIRST_ADDR_TYPE_CODE_A', 'FIRST_ADDR_TYPE_CODE_SITE', 'FIRST_ONNET_Y ', 'FIRST_INREGION_OR', 'FIRST_XOLIT_Y ', 'COMPANY_CODE_XO', 'IN_FOOTPRINT_N ', 'IN_FOOTPRINT_Y ', 'CIR_TECH_TYPE_TDM', 'PROGRAM_NO ACTION', 'ACCESS_SPEED_TIER_Medium', 'PORT_SPEED_TIER_Medium'] ['LVL_4_PRD_NM', 'VRTCL_MRKT_NAME', 'SALES_TIER', 'SR_CRCTP', 'RPTG_CRCTP', 'RPTG_CIR_SPEED', 'ACCESS_SPEED', 'PORT_SPEED', 'PVC_CAR_SPEED', 'ACCESS_DISC', 'PORT_DISC', 'PVC_CAR_DISC', 'OTHER_DISC', 'OTHER_ADJ', 'MARGIN', 'FIRST_LAT', 'FIRST_LGNTD', 'PROD_YR_MTH', 'MONTH', 'YEAR', 'IS_QUARTER_END', 'IS_YEAR_END', 'VENDOR_COUNT', 'MONTH_SIN', 'MONTH_COS', 'CIRCUIT_AGE_DAYS', 'INST_MONTH', 'INST_QUARTER', 'INST_DAY_OF_WEEK', 'ENDPOINT_DISTANCE_KM', 'SPEED_RATIO', 'SPEED_VARIATION', 'MAX_SPEED', 'TOTAL_DISC', 'HAS_MULTIPLE_DISC', 'ACCESS_DISC_RATE', 'PORT_DISC_RATE', 'DISCONNECT_COMPLEXITY', 'MARGIN_SPEED_INTERACTION', 'MARGIN_DISCONNECT_RATIO', 'TECH_ONNET_COMBO', 'MARKET_TIER_COMBO', 'MARGIN_SQUARED', 'LOG_MARGIN', 'ACCESS_SPEED_SQUARED', 'LOG_ACCESS_SPEED', 'PORT_SPEED_SQUARED', 'LOG_PORT_SPEED', 'TOTAL_DISC_SQUARED', 'LOG_TOTAL_DISC', 'DOM_INTL_FLAG_I ', 'INT_EXT_FLAG_I ', 'REV_TYPE_FLAG_C ', 'REV_TYPE_FLAG_P ', 'COST_TYPE_FLAG_C ', 'COST_TYPE_FLAG_S ', 'COST_TYPE_FLAG_U ', 'FIRST_ADDR_TYPE_CODE_    ', 'FIRST_ADDR_TYPE_CODE_1', 'FIRST_ADDR_TYPE_CODE_2', 'FIRST_ADDR_TYPE_CODE_A', 'FIRST_ADDR_TYPE_CODE_O', 'FIRST_ADDR_TYPE_CODE_SITE', 'FIRST_ADDR_TYPE_CODE_T', 'FIRST_ADDR_TYPE_CODE_Z', 'FIRST_ONNET_Y ', 'FIRST_INREGION_OR', 'FIRST_XOLIT_Y ', 'ONNET_PROV_Y ', 'COMPANY_CODE_XO', 'VRD_FLAG_M ', 'VRD_FLAG_V ', 'OPCO_REV_EMEA', 'OPCO_REV_USOPS', 'IN_FOOTPRINT_N ', 'IN_FOOTPRINT_Y ', 'NASP_TYPE_INTERNAL', 'CIR_TECH_TYPE_ETHERNET', 'CIR_TECH_TYPE_OCN', 'CIR_TECH_TYPE_OTHER', 'CIR_TECH_TYPE_TDM', 'CIR_TECH_TYPE_WIRELESS', 'CIR_BILL_TYPE_INTERNAL', 'PROGRAM_CARRIER MGT', 'PROGRAM_NO ACTION', 'PROGRAM_NO ACTION -- ONNET', 'PROGRAM_NO REVENUE', 'PROGRAM_TDM TO ETHERNET', 'DISTANCE_BUCKET_Close', 'DISTANCE_BUCKET_Medium', 'DISTANCE_BUCKET_Far', 'DISTANCE_BUCKET_Very_Far', 'RPTG_CIR_SPEED_TIER_Low', 'RPTG_CIR_SPEED_TIER_Medium', 'RPTG_CIR_SPEED_TIER_High', 'RPTG_CIR_SPEED_TIER_Very High', 'ACCESS_SPEED_TIER_Low', 'ACCESS_SPEED_TIER_Medium', 'ACCESS_SPEED_TIER_High', 'ACCESS_SPEED_TIER_Very High', 'PORT_SPEED_TIER_Low', 'PORT_SPEED_TIER_Medium', 'PORT_SPEED_TIER_High', 'PORT_SPEED_TIER_Very High', 'PVC_CAR_SPEED_TIER_Low', 'PVC_CAR_SPEED_TIER_Medium', 'SPEED_TIER_Medium', 'SPEED_TIER_High', 'SPEED_TIER_Ultra', 'SPEED_TIER_Unknown', 'TECH_BILL_COMBO_ETHERNET_EXTERNAL', 'TECH_BILL_COMBO_OCN_EXTERNAL', 'TECH_BILL_COMBO_OTHER_EXTERNAL', 'TECH_BILL_COMBO_TDM_EXTERNAL', 'TECH_BILL_COMBO_TDM_INTERNAL', 'TECH_BILL_COMBO_WIRELESS_EXTERNAL']
-training data did not have the following fields: FIRST_ADDR_TYPE_CODE_T, ACCESS_SPEED_TIER_Very High, SPEED_TIER_Medium, HAS_MULTIPLE_DISC, ACCESS_DISC, TECH_BILL_COMBO_TDM_INTERNAL, ACCESS_SPEED_TIER_High, SPEED_TIER_High, OPCO_REV_USOPS, PORT_SPEED_TIER_High, TOTAL_DISC, TECH_BILL_COMBO_OTHER_EXTERNAL, OTHER_DISC, PROGRAM_TDM TO ETHERNET, TECH_BILL_COMBO_ETHERNET_EXTERNAL, IS_YEAR_END, DISTANCE_BUCKET_Very_Far, FIRST_ADDR_TYPE_CODE_2, LOG_TOTAL_DISC, TECH_BILL_COMBO_WIRELESS_EXTERNAL, FIRST_ADDR_TYPE_CODE_    , FIRST_ADDR_TYPE_CODE_1, PVC_CAR_SPEED_TIER_Medium, YEAR, CIR_TECH_TYPE_OCN, CIR_TECH_TYPE_ETHERNET, NASP_TYPE_INTERNAL, SPEED_TIER_Unknown, ONNET_PROV_Y , PROGRAM_NO REVENUE, ACCESS_SPEED_TIER_Low, OTHER_ADJ, PORT_DISC, DOM_INTL_FLAG_I , INT_EXT_FLAG_I , INST_QUARTER, OPCO_REV_EMEA, PORT_DISC_RATE, DISTANCE_BUCKET_Far, RPTG_CIR_SPEED_TIER_Very High, VRD_FLAG_V , FIRST_ADDR_TYPE_CODE_Z, IS_QUARTER_END, PVC_CAR_SPEED_TIER_Low, RPTG_CIR_SPEED_TIER_High, PVC_CAR_DISC, PORT_SPEED_TIER_Low, PORT_SPEED_SQUARED, MARGIN_DISCONNECT_RATIO, RPTG_CIR_SPEED_TIER_Medium, SPEED_TIER_Ultra, TOTAL_DISC_SQUARED, TECH_BILL_COMBO_TDM_EXTERNAL, MARGIN_SPEED_INTERACTION, ACCESS_SPEED_SQUARED, FIRST_ADDR_TYPE_CODE_O, TECH_BILL_COMBO_OCN_EXTERNAL, DISTANCE_BUCKET_Close, DISTANCE_BUCKET_Medium, CIR_TECH_TYPE_WIRELESS, PROGRAM_CARRIER MGT, PORT_SPEED_TIER_Very High, PROGRAM_NO ACTION -- ONNET, DISCONNECT_COMPLEXITY, ACCESS_DISC_RATE, VRD_FLAG_M , RPTG_CIR_SPEED_TIER_Low, CIR_BILL_TYPE_INTERNAL, REV_TYPE_FLAG_P , CIR_TECH_TYPE_OTHER
+Error predicting with xgb model: feature_names mismatch: ['LVL_4_PRD_NM', 'VRTCL_MRKT_NAME', 'SALES_TIER', 'SR_CRCTP', 'RPTG_CRCTP', 'RPTG_CIR_SPEED', 'ACCESS_SPEED', 'PORT_SPEED', 'PVC_CAR_SPEED', 'MARGIN', 'FIRST_LAT', 'FIRST_LGNTD', 'PROD_YR_MTH', 'MONTH', 'VENDOR_COUNT', 'MONTH_SIN', 'MONTH_COS', 'CIRCUIT_AGE_DAYS', 'INST_MONTH', 'INST_DAY_OF_WEEK', 'ENDPOINT_DISTANCE_KM', 'SPEED_RATIO', 'SPEED_VARIATION', 'MAX_SPEED', 'TECH_ONNET_COMBO', 'MARKET_TIER_COMBO', 'MARGIN_SQUARED', 'LOG_MARGIN', 'LOG_ACCESS_SPEED', 'LOG_PORT_SPEED', 'REV_TYPE_FLAG_C ', 'COST_TYPE_FLAG_C ', 'COST_TYPE_FLAG_S ', 'COST_TYPE_FLAG_U ', 'FIRST_ADDR_TYPE_CODE_A', 'FIRST_ADDR_TYPE_CODE_SITE', 'FIRST_ONNET_Y ', 'FIRST_INREGION_OR', 'FIRST_XOLIT_Y ', 'COMPANY_CODE_XO', 'IN_FOOTPRINT_N ', 'IN_FOOTPRINT_Y ', 'CIR_TECH_TYPE_TDM', 'PROGRAM_NO ACTION', 'ACCESS_SPEED_TIER_Medium', 'PORT_SPEED_TIER_Medium'] ['LVL_4_PRD_NM', 'VRTCL_MRKT_NAME', 'SALES_TIER', 'SR_CRCTP', 'RPTG_CRCTP', 'RPTG_CIR_SPEED', 'ACCESS_SPEED', 'PORT_SPEED', 'PVC_CAR_SPEED', 'ACCESS_DISC', 'PORT_DISC', 'PVC_CAR_DISC', 'OTHER_DISC', 'OTHER_ADJ', 'MARGIN', 'FIRST_LAT', 'FIRST_LGNTD', 'PROD_YR_MTH', 'MONTH', 'YEAR', 'IS_QUARTER_END', 'IS_YEAR_END', 'VENDOR_COUNT', 'MONTH_SIN', 'MONTH_COS', 'CIRCUIT_AGE_DAYS', 'INST_MONTH', 'INST_QUARTER', 'INST_DAY_OF_WEEK', 'ENDPOINT_DISTANCE_KM', 'SPEED_RATIO', 'SPEED_VARIATION', 'MAX_SPEED', 'TOTAL_DISC', 'HAS_MULTIPLE_DISC', 'ACCESS_DISC_RATE', 'PORT_DISC_RATE', 'DISCONNECT_COMPLEXITY', 'MARGIN_SPEED_INTERACTION', 'MARGIN_DISCONNECT_RATIO', 'TECH_ONNET_COMBO', 'MARKET_TIER_COMBO', 'MARGIN_SQUARED', 'LOG_MARGIN', 'ACCESS_SPEED_SQUARED', 'LOG_ACCESS_SPEED', 'PORT_SPEED_SQUARED', 'LOG_PORT_SPEED', 'TOTAL_DISC_SQUARED', 'LOG_TOTAL_DISC', 'DOM_INTL_FLAG_I ', 'INT_EXT_FLAG_I ', 'REV_TYPE_FLAG_C ', 'REV_TYPE_FLAG_P ', 'COST_TYPE_FLAG_C ', 'COST_TYPE_FLAG_S ', 'COST_TYPE_FLAG_U ', 'FIRST_ADDR_TYPE_CODE_    ', 'FIRST_ADDR_TYPE_CODE_1', 'FIRST_ADDR_TYPE_CODE_2', 'FIRST_ADDR_TYPE_CODE_A', 'FIRST_ADDR_TYPE_CODE_O', 'FIRST_ADDR_TYPE_CODE_SITE', 'FIRST_ADDR_TYPE_CODE_T', 'FIRST_ADDR_TYPE_CODE_Z', 'FIRST_ONNET_Y ', 'FIRST_INREGION_OR', 'FIRST_XOLIT_Y ', 'ONNET_PROV_Y ', 'COMPANY_CODE_XO', 'VRD_FLAG_M ', 'VRD_FLAG_V ', 'OPCO_REV_EMEA', 'OPCO_REV_USOPS', 'IN_FOOTPRINT_N ', 'IN_FOOTPRINT_Y ', 'NASP_TYPE_INTERNAL', 'CIR_TECH_TYPE_ETHERNET', 'CIR_TECH_TYPE_OCN', 'CIR_TECH_TYPE_OTHER', 'CIR_TECH_TYPE_TDM', 'CIR_BILL_TYPE_INTERNAL', 'PROGRAM_CARRIER MGT', 'PROGRAM_NO ACTION', 'PROGRAM_NO ACTION -- ONNET', 'PROGRAM_NO REVENUE', 'PROGRAM_TDM TO ETHERNET', 'DISTANCE_BUCKET_Close', 'DISTANCE_BUCKET_Medium', 'DISTANCE_BUCKET_Far', 'DISTANCE_BUCKET_Very_Far', 'RPTG_CIR_SPEED_TIER_Low', 'RPTG_CIR_SPEED_TIER_Medium', 'RPTG_CIR_SPEED_TIER_High', 'RPTG_CIR_SPEED_TIER_Very High', 'ACCESS_SPEED_TIER_Low', 'ACCESS_SPEED_TIER_Medium', 'ACCESS_SPEED_TIER_High', 'ACCESS_SPEED_TIER_Very High', 'PORT_SPEED_TIER_Low', 'PORT_SPEED_TIER_Medium', 'PORT_SPEED_TIER_High', 'PORT_SPEED_TIER_Very High', 'PVC_CAR_SPEED_TIER_Low', 'PVC_CAR_SPEED_TIER_Medium', 'SPEED_TIER_Medium', 'SPEED_TIER_High', 'SPEED_TIER_Ultra', 'SPEED_TIER_Unknown', 'TECH_BILL_COMBO_ETHERNET_EXTERNAL', 'TECH_BILL_COMBO_OCN_EXTERNAL', 'TECH_BILL_COMBO_OTHER_EXTERNAL', 'TECH_BILL_COMBO_TDM_EXTERNAL', 'TECH_BILL_COMBO_TDM_INTERNAL']
+training data did not have the following fields: MARGIN_SPEED_INTERACTION, FIRST_ADDR_TYPE_CODE_T, INST_QUARTER, TECH_BILL_COMBO_TDM_EXTERNAL, DISTANCE_BUCKET_Very_Far, SPEED_TIER_High, PORT_DISC_RATE, FIRST_ADDR_TYPE_CODE_1, TECH_BILL_COMBO_OCN_EXTERNAL, IS_QUARTER_END, ACCESS_SPEED_TIER_Low, ACCESS_DISC, CIR_TECH_TYPE_OTHER, SPEED_TIER_Ultra, ACCESS_DISC_RATE, PORT_SPEED_TIER_Low, PVC_CAR_DISC, PORT_SPEED_TIER_Very High, SPEED_TIER_Unknown, PVC_CAR_SPEED_TIER_Medium, DISTANCE_BUCKET_Far, CIR_BILL_TYPE_INTERNAL, MARGIN_DISCONNECT_RATIO, INT_EXT_FLAG_I , ONNET_PROV_Y , RPTG_CIR_SPEED_TIER_Very High, NASP_TYPE_INTERNAL, PORT_SPEED_TIER_High, YEAR, TECH_BILL_COMBO_TDM_INTERNAL, PORT_DISC, VRD_FLAG_M , FIRST_ADDR_TYPE_CODE_2, TOTAL_DISC, RPTG_CIR_SPEED_TIER_Medium, OPCO_REV_EMEA, CIR_TECH_TYPE_OCN, OTHER_ADJ, SPEED_TIER_Medium, DISTANCE_BUCKET_Medium, RPTG_CIR_SPEED_TIER_High, IS_YEAR_END, REV_TYPE_FLAG_P , PORT_SPEED_SQUARED, FIRST_ADDR_TYPE_CODE_O, RPTG_CIR_SPEED_TIER_Low, PROGRAM_NO REVENUE, ACCESS_SPEED_TIER_Very High, TECH_BILL_COMBO_OTHER_EXTERNAL, PROGRAM_CARRIER MGT, PROGRAM_NO ACTION -- ONNET, PROGRAM_TDM TO ETHERNET, DISCONNECT_COMPLEXITY, TECH_BILL_COMBO_ETHERNET_EXTERNAL, FIRST_ADDR_TYPE_CODE_Z, HAS_MULTIPLE_DISC, PVC_CAR_SPEED_TIER_Low, CIR_TECH_TYPE_ETHERNET, TOTAL_DISC_SQUARED, LOG_TOTAL_DISC, ACCESS_SPEED_TIER_High, DISTANCE_BUCKET_Close, VRD_FLAG_V , OPCO_REV_USOPS, OTHER_DISC, DOM_INTL_FLAG_I , ACCESS_SPEED_SQUARED, FIRST_ADDR_TYPE_CODE_
 Error predicting with rf model: The feature names should match those that were passed during fit.
 Feature names unseen at fit time:
 - ACCESS_DISC
@@ -170,7 +193,7 @@ Feature names unseen at fit time:
 - ACCESS_SPEED_TIER_Low
 - ...
 
-Error predicting with lgb model: Number of features of the model must match the input. Model n_features_ is 46 and input n_features is 116
+Error predicting with lgb model: Number of features of the model must match the input. Model n_features_ is 46 and input n_features is 114
 Error predicting with gb model: The feature names should match those that were passed during fit.
 Feature names unseen at fit time:
 - ACCESS_DISC
@@ -185,31 +208,42 @@ February predictions saved to results/february_predictions.csv
 
 === STEP 5: Generating summary report ===
 
-Traceback (most recent call last):
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/runpy.py", line 197, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-  File "/Users/SRIWOPE/miniforge3/envs/streamlit/lib/python3.9/runpy.py", line 87, in _run_code
-    exec(code, run_globals)
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/enhance_predict_sequence.py", line 370, in <module>
-    main()
-  File "/Users/SRIWOPE/PycharmProjects/model_enhancement/enhance_predict_sequence.py", line 358, in main
-    for lower, upper in ranges:
-UnboundLocalError: local variable 'ranges' referenced before assignment
+Summary report saved to results/prediction_summary_20250330_231010.txt
+
+Prediction pipeline completed in 29.61 seconds
 (streamlit) SRIWOPE@XHK9JJM27Y model_enhancement %
-
-
 === Circuit Disconnect Duration Prediction Summary ===
-Generated on: 2025-03-30 22:57:53
+Generated on: 2025-03-30 23:10:10
 
 === Data Counts ===
-January active circuits: 2089
-February active circuits: 2045
+January active circuits: 2090
+February active circuits: 2049
 
 === Prediction Summary ===
 
+January Predictions:
+  Average predicted duration: 13.36 days
+  Min predicted duration: 7.37 days
+  Max predicted duration: 15.45 days
+
+  Distribution by duration range:
+    0-30 days: 2090 circuits (100.00%)
+    31-60 days: 0 circuits (0.00%)
+    61-90 days: 0 circuits (0.00%)
+    91-180 days: 0 circuits (0.00%)
+    181-365 days: 0 circuits (0.00%)
+
 February Predictions:
-  Average predicted duration: 2.90 days
+  Average predicted duration: 2.92 days
   Min predicted duration: -2.80 days
   Max predicted duration: 25.94 days
 
   Distribution by duration range:
+    0-30 days: 1217 circuits (59.39%)
+    31-60 days: 0 circuits (0.00%)
+    61-90 days: 0 circuits (0.00%)
+    91-180 days: 0 circuits (0.00%)
+    181-365 days: 0 circuits (0.00%)
+
+
+Pipeline completed in 29.61 seconds
